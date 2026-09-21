@@ -31,10 +31,10 @@ test('ATTA live map is wired to Mapbox GL JS with Kyoto coordinates', async () =
   const build = await readFile('scripts/build.mjs','utf8');
 
   assert.match(html, /mapbox-gl-js\/v3\.30\.0\/mapbox-gl\.js/);
-  assert.match(html, /mapbox-gl-js\/v3\.30\.0\/mapbox-gl\.css/);
+  assert.match(html, /mapbox-gl-js\/v3\.30\.0\/mapbox-gl\.css/);\n  assert.match(html, /maplibre-gl@5\.12\.0\/dist\/maplibre-gl\.js/);
   assert.match(js, /135\.67133,35\.01718/);
   assert.match(js, /directions\/v5\/mapbox\/walking/);
-  assert.match(js, /tile\.openstreetmap\.org/);
+  assert.match(js, /tile\.openstreetmap\.org/);\n  assert.match(js, /window\.maplibregl/);
   assert.match(build, /MAPBOX_PUBLIC_TOKEN/);
   assert.match(build, /MAPBOX_STYLE_URL/);
 });
