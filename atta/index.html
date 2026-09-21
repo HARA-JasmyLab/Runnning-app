@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#fff9f1">
   <meta name="description" content="ATTA! - AIで旅をつくり、旅先で発見を集め、旅日記として残す旅行アプリ">
   <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css">
   <link rel="stylesheet" href="/styles.css">
   <title>ATTA! — AI Travel × Stamp Rally × Diary</title>
 </head>
@@ -14,6 +15,8 @@
   <main id="app" class="app" aria-live="polite"></main>
   <div id="overlay" class="overlay" aria-hidden="true"><div id="sheet" class="sheet"></div></div>
   <div id="toast" class="toast" role="status"></div>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.js" defer></script>
+  <script src="/config.js" defer></script>
   <script type="module" src="/app.js"></script>
 </body>
 </html>
