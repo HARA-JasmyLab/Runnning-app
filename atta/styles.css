@@ -162,3 +162,14 @@ body{background:
 @media(max-width:380px){
   .h1{font-size:28px}.hero{height:250px}.photo-hero{height:300px}.map{min-height:520px}.big-stamp{width:176px;height:176px}
 }
+
+.photo-hero .topbar{position:absolute;top:0;left:0;right:0;color:#fff;background:linear-gradient(180deg,rgba(0,18,28,.48),transparent)}
+.photo-hero .topbar .back{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.photo-hero .topbar .icon-btn{background:rgba(255,255,255,.9)}
+button{-webkit-tap-highlight-color:transparent}
+.btn,.chip,.nav-item,.nav-plus,.icon-btn{transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+.chip:active,.nav-item:active,.nav-plus:active,.icon-btn:active{transform:scale(.96)}
+@media(hover:hover){
+  .card:hover{box-shadow:0 20px 42px #14384a18}
+  .btn:hover{box-shadow:0 12px 28px #082d451a}
+}
