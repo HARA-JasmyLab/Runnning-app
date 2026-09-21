@@ -83,7 +83,8 @@ Vercel設定:
 - Trip状態の端末保存
 - AI旅程生成の疑似フロー
 - Golden Pathの画面遷移
-- Live Mapプロトタイプ
+- Mapbox GL JSによる実地図Live Map（京都・嵐山）
+- Mapbox token未設定時のOpenStreetMap実地図fallback
 - Spot Detail
 - GPS Permission導線
 - Stamp GETアニメーション
@@ -103,7 +104,7 @@ Vercel設定:
 まだ本番接続していないもの:
 
 - 本物のLLM APIによる旅程生成
-- Google Maps / Mapbox
+- Mapbox DirectionsのProduction token設定
 - Places API
 - バックグラウンドGPS
 - 本番Geofence / 訪問認定
@@ -151,3 +152,31 @@ Plan
 - ATTA! Golden Path v1を実装
 - 旧Running Appはバックアップbranchに保存
 
+
+
+## Mapbox
+
+ATTA! のLive Trip Mapは Mapbox GL JS で実装済みです。
+
+現在の挙動:
+
+- `MAPBOX_PUBLIC_TOKEN` が設定済み: Mapbox style + Mapbox Directions walking route
+- token未設定: Mapbox GL JS上でOpenStreetMap実地図を表示し、ATTA!の京都Spot/Routeを重ねる
+
+Vercel ProductionでMapbox本番地図・徒歩経路を有効にする場合は、Project Environment Variablesに以下を設定します。
+
+```text
+MAPBOX_PUBLIC_TOKEN=pk....
+MAPBOX_STYLE_URL=mapbox://styles/mapbox/dark-v11
+```
+
+`MAPBOX_PUBLIC_TOKEN` はブラウザ配信用のPublic tokenを使用します。Secret tokenはクライアントへ配信しないでください。
+
+実装中の京都座標:
+
+- 渡月橋付近
+- 竹林の小径
+- 野宮神社
+- 天龍寺
+
+「現在地」ボタンは位置情報許可後、端末の現在地へMapを移動します。
