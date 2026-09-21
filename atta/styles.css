@@ -203,3 +203,14 @@ button{-webkit-tap-highlight-color:transparent}
   .mapboxgl-ctrl-top-right{top:72px}
   .mapboxgl-ctrl-bottom-right{bottom:168px}
 }
+
+.maplibregl-map{font:inherit}
+.maplibregl-canvas{outline:none}
+.maplibregl-ctrl-top-right{top:82px;right:4px}
+.maplibregl-ctrl-bottom-right{bottom:172px;right:8px}
+.maplibregl-ctrl-attrib{font-size:9px!important;background:rgba(255,255,255,.82)!important;border-radius:8px!important}
+.maplibregl-ctrl-logo{opacity:.72}
+@media(max-width:380px){
+  .maplibregl-ctrl-top-right{top:72px}
+  .maplibregl-ctrl-bottom-right{bottom:168px}
+}
