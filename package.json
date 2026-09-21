@@ -1,19 +1,12 @@
 {
-  "name": "jasmy-run",
-  "version": "0.1.0",
+  "name": "atta-travel-prototype",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/dev.mjs",
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/atta.test.js"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "2.57.4"
-  },
-  "devDependencies": {
-    "@electric-sql/pglite": "^0.3.10",
-    "esbuild": "0.25.9",
-    "jsdom": "26.1.0"
-  }
+  "devDependencies": {}
 }
