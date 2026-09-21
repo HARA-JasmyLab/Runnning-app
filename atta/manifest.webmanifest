@@ -1,0 +1,11 @@
+{
+  "name": "ATTA!",
+  "short_name": "ATTA!",
+  "description": "AIで旅をつくり、旅先で発見を集め、旅日記として残す旅行アプリ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff9f1",
+  "theme_color": "#fff9f1",
+  "lang": "ja",
+  "orientation": "portrait"
+}
