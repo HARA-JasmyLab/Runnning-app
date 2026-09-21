@@ -45,6 +45,7 @@ function fallbackRoute(updated){
   };
 }
 async function fetchWalkingRoute(updated){
+  if(!MAPBOX_TOKEN) return fallbackRoute(updated);
   const key=routeCacheKey(updated);
   try{
     const cached=sessionStorage.getItem(key);
@@ -78,15 +79,29 @@ async function initMapboxMap(updated){
   const container=document.querySelector("#mapboxMap");
   const shell=document.querySelector(".map");
   if(!container || !shell) return;
-  if(!MAPBOX_TOKEN || !window.mapboxgl){
+  if(!window.mapboxgl){
     shell.classList.add("mapbox-unavailable");
     return;
   }
   try{
-    window.mapboxgl.accessToken=MAPBOX_TOKEN;
+    if(MAPBOX_TOKEN) window.mapboxgl.accessToken=MAPBOX_TOKEN;
+    const liveStyle=MAPBOX_TOKEN ? MAPBOX_STYLE : {
+      version:8,
+      sources:{
+        osm:{
+          type:"raster",
+          tiles:["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+          tileSize:256,
+          attribution:"© OpenStreetMap contributors"
+        }
+      },
+      layers:[
+        {id:"osm",type:"raster",source:"osm",paint:{"raster-saturation":-0.38,"raster-contrast":0.12,"raster-brightness-min":0.08,"raster-brightness-max":0.78}}
+      ]
+    };
     liveMapInstance=new window.mapboxgl.Map({
       container,
-      style:MAPBOX_STYLE,
+      style:liveStyle,
       center:updated ? [135.6728,35.0164] : [135.6741,35.0153],
       zoom:15.4,
       bearing:-14,
@@ -221,7 +236,7 @@ function liveMap(updated){
       '<svg class="route" viewBox="0 0 400 420" preserveAspectRatio="none"><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="white" stroke-width="9" stroke-linecap="round"/><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="#ff355c" stroke-width="3" stroke-dasharray="8 9" stroke-linecap="round"/></svg>'+
       '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
     '</div>'+
-    '<div class="map-status"><span class="map-status-live">LIVE MAP</span><span class="map-status-fallback">MAPBOX READY</span></div>'+
+    '<div class="map-status"><span class="map-status-live">'+(MAPBOX_TOKEN?'MAPBOX LIVE':'LIVE MAP · OSM')+'</span><span class="map-status-fallback">MAP LOADING</span></div>'+
     '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button><button data-action="assistant" aria-label="ATTA AI">✨</button></div>'+
     '<div class="map-sheet"><div class="caption" style="font-weight:900;color:var(--red)">NEXT</div><div class="row between" style="margin-top:5px"><div><div class="h3">'+(updated?'天龍寺':'竹林の小径')+'</div><div class="small muted">京都・嵐山</div></div><div style="text-align:right"><strong>'+(updated?'15:20':'14:35')+'</strong><div class="small muted">'+(updated?'徒歩 9分':'あと18分')+'</div></div></div><button class="btn primary" style="margin-top:12px" data-action="'+(updated?'next-spot':'spot')+'">'+(updated?'次のスポットを見る':'スポットを見る')+'</button>'+(updated?'<button class="btn ghost" data-action="finish-trip">旅を終了</button>':'<button class="btn ghost" data-action="simulate-arrival">デモ：到着をシミュレート</button>')+'</div></div></section>';
 }
