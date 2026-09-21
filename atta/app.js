@@ -79,12 +79,13 @@ async function initMapboxMap(updated){
   const container=document.querySelector("#mapboxMap");
   const shell=document.querySelector(".map");
   if(!container || !shell) return;
-  if(!window.mapboxgl){
+  const mapEngine=MAPBOX_TOKEN ? window.mapboxgl : (window.maplibregl || window.mapboxgl);
+  if(!mapEngine){
     shell.classList.add("mapbox-unavailable");
     return;
   }
   try{
-    if(MAPBOX_TOKEN) window.mapboxgl.accessToken=MAPBOX_TOKEN;
+    if(MAPBOX_TOKEN && window.mapboxgl) window.mapboxgl.accessToken=MAPBOX_TOKEN;
     const liveStyle=MAPBOX_TOKEN ? MAPBOX_STYLE : {
       version:8,
       sources:{
@@ -99,7 +100,7 @@ async function initMapboxMap(updated){
         {id:"osm",type:"raster",source:"osm",paint:{"raster-saturation":-0.38,"raster-contrast":0.12,"raster-brightness-min":0.08,"raster-brightness-max":0.78}}
       ]
     };
-    liveMapInstance=new window.mapboxgl.Map({
+    liveMapInstance=new mapEngine.Map({
       container,
       style:liveStyle,
       center:updated ? [135.6728,35.0164] : [135.6741,35.0153],
@@ -109,7 +110,7 @@ async function initMapboxMap(updated){
       attributionControl:true,
       cooperativeGestures:false
     });
-    liveMapInstance.addControl(new window.mapboxgl.NavigationControl({showCompass:false}),"top-right");
+    liveMapInstance.addControl(new mapEngine.NavigationControl({showCompass:false}),"top-right");
     liveMapInstance.once("load",async()=>{
       shell.classList.add("mapbox-live");
       const route=await fetchWalkingRoute(updated);
@@ -117,11 +118,11 @@ async function initMapboxMap(updated){
       liveMapInstance.addSource("atta-route",{type:"geojson",data:route});
       liveMapInstance.addLayer({id:"atta-route-casing",type:"line",source:"atta-route",paint:{"line-color":"#ffffff","line-width":8,"line-opacity":0.96}});
       liveMapInstance.addLayer({id:"atta-route-line",type:"line",source:"atta-route",paint:{"line-color":"#ff355c","line-width":4,"line-opacity":1}});
-      new window.mapboxgl.Marker({element:markerEl("visited","渡月橋")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
-      new window.mapboxgl.Marker({element:markerEl(updated?"visited":"next",updated?"竹林の小径・訪問済み":"竹林の小径")}).setLngLat(KYOTO_MAP.bamboo).addTo(liveMapInstance);
-      new window.mapboxgl.Marker({element:markerEl("visited","野宮神社")}).setLngLat(KYOTO_MAP.nogu).addTo(liveMapInstance);
-      if(updated) new window.mapboxgl.Marker({element:markerEl("next","天龍寺")}).setLngLat(KYOTO_MAP.tenryuji).addTo(liveMapInstance);
-      liveUserMarker=new window.mapboxgl.Marker({element:markerEl("current","現在地")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
+      new mapEngine.Marker({element:markerEl("visited","渡月橋")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
+      new mapEngine.Marker({element:markerEl(updated?"visited":"next",updated?"竹林の小径・訪問済み":"竹林の小径")}).setLngLat(KYOTO_MAP.bamboo).addTo(liveMapInstance);
+      new mapEngine.Marker({element:markerEl("visited","野宮神社")}).setLngLat(KYOTO_MAP.nogu).addTo(liveMapInstance);
+      if(updated) new mapEngine.Marker({element:markerEl("next","天龍寺")}).setLngLat(KYOTO_MAP.tenryuji).addTo(liveMapInstance);
+      liveUserMarker=new mapEngine.Marker({element:markerEl("current","現在地")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
 
       if(state.locationGranted && navigator.geolocation){
         liveWatchId=navigator.geolocation.watchPosition(pos=>{
