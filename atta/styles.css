@@ -47,3 +47,118 @@ h1,h2,h3,p{margin:0}.h1{font-size:30px;line-height:1.12;letter-spacing:-1.2px}.h
 .offline{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:90;background:#fff1d8;color:#7a4d00;text-align:center;padding:7px 10px;font-size:12px;font-weight:800;display:none}.offline.show{display:block}
 @media(min-width:700px){body{padding:24px 0}.app{min-height:calc(100vh - 48px);border-radius:30px}.bottom-nav{bottom:24px;border-radius:0 0 30px 30px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* === ATTA! UI POLISH v2 / App Store visual language === */
+:root{
+  --cream:#fff8ef;--paper:#fffdf8;--ink:#0a3349;--coral:#ff355c;--sky:#dcebf0;
+  --map:#102731;--map2:#183945;--soft-blue:#edf4ff;--soft-pink:#fff0f4;
+}
+body{background:
+  radial-gradient(circle at 15% 10%,#ffffff 0 12%,transparent 13%),
+  radial-gradient(circle at 84% 82%,#f8e9dc 0 18%,transparent 19%),
+  #edf2f4}
+.app{background:
+  radial-gradient(circle at 88% 4%,#fff1e6 0 9%,transparent 10%),
+  var(--cream)}
+.topbar{background:linear-gradient(180deg,rgba(255,248,239,.94),rgba(255,248,239,.72),transparent);backdrop-filter:blur(10px)}
+.brand{font-size:34px;letter-spacing:-2px;text-shadow:0 1px 0 #fff}
+.icon-btn{border:1px solid #ffffffc7;background:#ffffffde;box-shadow:0 10px 28px #092d4512}
+.h1{font-size:31px;letter-spacing:-1.45px}.h2{font-size:23px;letter-spacing:-.55px}
+.card{background:rgba(255,255,255,.93);border-color:#ffffff;box-shadow:0 16px 36px #14384a12}
+.hero{height:282px;border-radius:30px;border:2px solid rgba(255,255,255,.86);box-shadow:0 24px 54px #15334229}
+.hero:before{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.26);border-radius:22px;z-index:1;pointer-events:none}
+.hero:after{background:linear-gradient(180deg,rgba(3,25,40,.05) 8%,rgba(3,25,40,.03) 36%,rgba(3,25,40,.82) 100%)}
+.trip-photo{
+  background-color:#7b8c84;
+  background-image:
+    linear-gradient(180deg,rgba(5,45,70,.06),rgba(5,45,70,.18)),
+    url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=85"),
+    linear-gradient(135deg,#8daab6 0 37%,#c3baa6 38% 65%,#4f5d52 66% 100%);
+  background-blend-mode:normal,multiply,normal
+}
+.street{
+  background-color:#746b60;
+  background-image:
+    linear-gradient(180deg,rgba(5,45,70,.08),rgba(5,45,70,.28)),
+    url("https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?auto=format&fit=crop&w=1200&q=85"),
+    linear-gradient(145deg,#9eb5bb 0 34%,#c9b49c 35% 60%,#655b50 61% 100%);
+  background-blend-mode:normal,multiply,normal
+}
+.bamboo{
+  background-color:#537a5c;
+  background-image:
+    linear-gradient(180deg,rgba(5,45,70,.02),rgba(4,32,25,.3)),
+    url("https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1200&q=85"),
+    repeating-linear-gradient(88deg,#456b4d 0 10px,#75986e 10px 18px,#4c7654 18px 28px,#8aac7d 28px 31px);
+  background-blend-mode:normal,multiply,normal
+}
+.sunset{
+  background-color:#a37b69;
+  background-image:
+    linear-gradient(180deg,rgba(6,29,40,.03),rgba(6,29,40,.36)),
+    url("https://images.unsplash.com/photo-1493780474015-ba834fd0ce2f?auto=format&fit=crop&w=1200&q=85"),
+    linear-gradient(180deg,#e3b493 0,#b88177 45%,#51494a 100%);
+  background-blend-mode:normal,multiply,normal
+}
+.hero-copy{bottom:21px}.hero-copy .caption{font-weight:850;letter-spacing:.08em}
+.route-doodle{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 4px 9px rgba(0,0,0,.13))}
+.route-doodle path{fill:none;stroke:var(--coral);stroke-width:3;stroke-linecap:round;stroke-dasharray:2 8}
+.route-doodle circle{fill:#fff;stroke:var(--coral);stroke-width:3}
+.postmark{position:absolute;right:17px;top:17px;z-index:3;width:72px;height:72px;border:2px solid rgba(255,255,255,.78);border-radius:50%;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:900;letter-spacing:.08em;transform:rotate(8deg);text-align:center;line-height:1.05;background:rgba(5,45,70,.16);backdrop-filter:blur(4px)}
+.hand-note{position:absolute;left:18px;top:18px;z-index:3;color:#fff;font-family:"Marker Felt","Bradley Hand","Hannotate SC",cursive;font-size:15px;transform:rotate(-3deg);text-shadow:0 2px 12px #0008}
+.btn{border-radius:20px;letter-spacing:-.15px;box-shadow:0 9px 22px #082d4510}
+.btn.primary{background:linear-gradient(135deg,#062e46,#0a405a)}.btn.red{background:linear-gradient(135deg,#ff3159,#f21f4b)}.btn.blue{background:linear-gradient(135deg,#347dff,#225ee8)}
+.chip{background:#ffffffd9;backdrop-filter:blur(8px);box-shadow:0 5px 14px #1737490a}.chip.on{background:var(--ink)}
+.ai{position:relative;overflow:hidden;background:linear-gradient(135deg,#eef4ff 0,#f7f3ff 68%,#fff 100%);box-shadow:0 14px 28px #274c8e10}.ai:after{content:"✦";position:absolute;right:-8px;top:-18px;font-size:74px;color:#7aa4ff15}
+.ai-tag{letter-spacing:.08em}
+.bottom-nav{background:rgba(255,255,255,.94);box-shadow:0 -10px 35px #17374912}
+.nav-item{gap:3px}.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}.nav-item.active svg{stroke-width:2.3}
+.nav-plus{display:grid;place-items:center;background:linear-gradient(145deg,#062f47,#0c4a64);box-shadow:0 12px 28px #052d4652}.nav-plus svg{width:25px;height:25px;stroke:#fff;fill:none;stroke-width:2.1}
+.stamp-strip{padding:7px 3px 10px}.mini-stamp{min-width:68px}.stamp-dot{width:58px;height:58px;border-radius:50%;background:#fffdf9;box-shadow:0 7px 17px #132d3b10}.stamp-dot.earned{position:relative;border:2px solid var(--coral);box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px var(--coral),0 8px 18px #f52b5515;font-size:13px}
+.stamp-dot.earned:after{content:"✓";position:absolute;right:-3px;bottom:-3px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff;border:2px solid #fff;font-size:10px}
+.map{
+  background-color:var(--map);
+  background-image:
+    radial-gradient(circle at 22% 27%,#325044 0 8%,transparent 9%),
+    radial-gradient(circle at 78% 72%,#2f5548 0 13%,transparent 14%),
+    linear-gradient(28deg,transparent 0 34%,rgba(255,255,255,.055) 35% 36%,transparent 37% 100%),
+    linear-gradient(128deg,transparent 0 53%,rgba(255,255,255,.06) 54% 55%,transparent 56% 100%),
+    repeating-linear-gradient(0deg,transparent 0 48px,rgba(255,255,255,.025) 49px 50px);
+}
+.map:before{opacity:.65;background:
+  linear-gradient(34deg,transparent 0 24%,rgba(196,213,206,.08) 25% 28%,transparent 29%),
+  linear-gradient(145deg,transparent 0 46%,rgba(196,213,206,.06) 47% 50%,transparent 51%)}
+.map:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,transparent 0 36%,rgba(0,0,0,.18) 100%);pointer-events:none}
+.route{z-index:2}.pin{z-index:4;border-color:#fff;box-shadow:0 10px 24px #0007}.pin.visited{background:linear-gradient(145deg,#fff,#eaf3ef);color:#0b8965}.pin.next{background:linear-gradient(145deg,#ff3a5f,#eb1746);box-shadow:0 0 0 8px #ff355c26,0 10px 24px #0007}.pin.current{z-index:5;animation:pulse 1.8s infinite}@keyframes pulse{50%{box-shadow:0 0 0 13px #2d83ff15}}
+.map-controls{z-index:6}.map-controls button{background:#ffffffed;color:var(--ink);font-size:18px}
+.map-label{position:absolute;z-index:3;color:#dce9ed;font-size:11px;letter-spacing:.08em;font-weight:800;text-shadow:0 2px 4px #0008}.map-label.big{font-size:15px}
+.map-sheet{z-index:8;background:rgba(255,255,255,.95);border:1px solid #ffffff;backdrop-filter:blur(18px);box-shadow:0 22px 55px #0008}
+.photo-hero{height:340px}.photo-hero:after{background:linear-gradient(180deg,#00131e6b,transparent 35%,#00131e4d)}
+.detail-sheet{background:linear-gradient(180deg,#fffaf3,#fff8ef);box-shadow:0 -12px 40px #00172317}
+.stamp-card{position:relative;background:linear-gradient(135deg,#fff6f8,#fffdfb);border:1.5px dashed #ff6d8c;box-shadow:0 10px 26px #f52b5510}
+.stamp-card:after{content:"ATTA!";position:absolute;right:17px;top:18px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--coral);color:var(--coral);font-size:10px;font-weight:950;transform:rotate(9deg)}
+.full-photo:before{background:linear-gradient(180deg,rgba(7,29,34,.35),rgba(255,248,239,.76) 55%,rgba(255,248,239,.92));backdrop-filter:blur(6px)}
+.big-stamp{position:relative;width:194px;height:194px;border:3px solid var(--coral);box-shadow:inset 0 0 0 4px rgba(255,255,255,.7),inset 0 0 0 7px var(--coral),0 19px 38px #f52b5529;background:
+  repeating-radial-gradient(circle at 50% 50%,rgba(255,53,92,.02) 0 3px,transparent 4px 8px),
+  rgba(255,255,255,.78)}
+.big-stamp:before{content:"DISCOVERED";position:absolute;top:21px;left:0;right:0;font-size:10px;letter-spacing:.16em;font-weight:900}
+.big-stamp:after{content:"21 SEP 2026";position:absolute;bottom:18px;left:0;right:0;font-size:9px;letter-spacing:.12em;font-weight:900}
+.passport-kicker{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#ffffffa8;border:1px solid #ffffff;color:var(--ink);font-size:10px;font-weight:900;letter-spacing:.13em}
+.memory-add{background:linear-gradient(135deg,#fff,#fff8f3);border-color:#bccbd2;box-shadow:inset 0 0 0 7px #fff,0 12px 24px #1232460d}
+.diary-photo{height:260px;border-radius:28px;border:2px solid #fff;box-shadow:0 20px 42px #15334222}
+.diary-photo:before{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.25);border-radius:20px;z-index:1}
+.diary-title{z-index:3}.polaroids{display:grid;grid-template-columns:1.05fr .95fr;gap:10px;margin-top:14px}.memory-shot{height:118px;border-radius:18px;border:6px solid #fff;box-shadow:0 10px 24px #1533421c;background-size:cover;background-position:center}.memory-shot:nth-child(2){transform:rotate(1.5deg)}.memory-shot:nth-child(3){transform:rotate(-1.2deg);grid-column:1/3;height:94px}
+.shot-a{background:linear-gradient(145deg,#86a19c,#314f45)}.shot-b{background:linear-gradient(145deg,#d9a77e,#7b6d5a)}.shot-c{background:linear-gradient(145deg,#8fa4b2,#d2c3a9)}
+.story .hero{height:300px}.share-preview{box-shadow:0 18px 34px #15334212}
+.handwritten{font-family:"Marker Felt","Bradley Hand","Hannotate SC",cursive;font-weight:600;letter-spacing:.02em;color:var(--coral)}
+.planner-preview{height:96px;margin:14px 0 18px;border-radius:22px;background:
+  radial-gradient(circle at 24% 52%,#fff 0 8px,var(--coral) 9px 11px,transparent 12px),
+  radial-gradient(circle at 52% 36%,#fff 0 8px,var(--coral) 9px 11px,transparent 12px),
+  radial-gradient(circle at 79% 58%,#fff 0 8px,var(--coral) 9px 11px,transparent 12px),
+  linear-gradient(150deg,#153746,#0d2734);
+  position:relative;overflow:hidden;border:1px solid #ffffff70;box-shadow:0 15px 34px #17374922}
+.planner-preview:after{content:"";position:absolute;left:22%;right:18%;top:49%;height:2px;background:repeating-linear-gradient(90deg,var(--coral) 0 6px,transparent 6px 12px);transform:rotate(2deg)}
+.planner-preview span{position:absolute;right:15px;bottom:10px;color:#fff;font-size:10px;letter-spacing:.08em;font-weight:850}
+@media(max-width:380px){
+  .h1{font-size:28px}.hero{height:250px}.photo-hero{height:300px}.map{min-height:520px}.big-stamp{width:176px;height:176px}
+}
