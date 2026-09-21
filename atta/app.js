@@ -18,14 +18,24 @@ function openSheet(html){ sheet.innerHTML=html; overlay.classList.add("open"); o
 function closeSheet(){ overlay.classList.remove("open"); overlay.setAttribute("aria-hidden","true"); }
 function brand(){ return '<div class="brand">ATTA<i>!</i></div>'; }
 function top(title, back){ return '<div class="topbar">'+(back===false?brand():'<button class="back" data-action="back">‹</button>')+(title?'<strong>'+title+'</strong>':'')+'<button class="icon-btn" data-action="menu">•••</button></div>'; }
+function icon(name){
+  const icons={
+    home:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3l8.5 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-4.8v-6.2H9.8V21H5a1.5 1.5 0 0 1-1.5-1.5z"/></svg>',
+    plan:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 5 5-2 6 2 5-2v16l-5 2-6-2-5 2zM9 3v16m6-14v16"/></svg>',
+    memories:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v12H7a2 2 0 0 1-2-2z"/><path d="M7 18a2 2 0 0 0 0 4h12v-4M9 8h6M9 12h4"/></svg>',
+    profile:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21c.5-4.8 3-7.1 7.5-7.1s7 2.3 7.5 7.1"/></svg>',
+    plus:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>'
+  };
+  return icons[name]||'';
+}
 function nav(active){
   return '<nav class="bottom-nav">'+
-    item("home","⌂","ホーム",active)+item("plan","◫","プラン",active)+
-    '<button class="nav-plus" data-action="new-trip">＋</button>'+
-    item("memories","◉","思い出",active)+item("profile","◎","マイページ",active)+
+    item("home","home","ホーム",active)+item("plan","plan","プラン",active)+
+    '<button class="nav-plus" data-action="new-trip" aria-label="新しい旅">'+icon("plus")+'</button>'+
+    item("memories","memories","思い出",active)+item("profile","profile","マイページ",active)+
   '</nav>';
 }
-function item(id, ico, label, active){ return '<button class="nav-item '+(id===active?'active':'')+'" data-action="tab" data-tab="'+id+'"><b>'+ico+'</b><span>'+label+'</span></button>'; }
+function item(id, ico, label, active){ return '<button class="nav-item '+(id===active?'active':'')+'" data-action="tab" data-tab="'+id+'">'+icon(ico)+'<span>'+label+'</span></button>'; }
 function chips(values, selected, key){
   return '<div class="pills">'+values.map(v=>'<button class="chip '+(selected.indexOf(v)>=0?'on':'')+'" data-action="chip" data-key="'+key+'" data-value="'+v+'">'+v+'</button>').join("")+'</div>';
 }
@@ -38,7 +48,7 @@ function stats(){ return '<div class="stats"><div class="stat"><strong>6</strong
 function homeEmpty(){
   return '<section class="screen">'+top("",false)+'<div class="content">'+
     '<div style="padding:18px 0 20px"><h1 class="h1">次は、どこへ行こう。</h1><p class="body muted" style="margin-top:8px">AIと一緒に、次の旅を見つけよう。</p></div>'+
-    '<div class="hero trip-photo"><div class="hero-copy"><div class="caption">CREATE A NEW TRIP</div><h2 class="h2" style="margin:6px 0">旅程づくりは、AIにまかせよう。</h2><p class="small">行き先と気分を伝えるだけ。</p></div></div>'+
+    '<div class="hero trip-photo"><div class="hand-note">your next story →</div><div class="postmark">ATTA!<br>TRAVEL</div><svg class="route-doodle" viewBox="0 0 370 282" preserveAspectRatio="none"><path d="M32 226 C82 187,96 215,139 166 S211 126,247 145 S306 104,339 57"/><circle cx="32" cy="226" r="5"/><circle cx="339" cy="57" r="5"/></svg><div class="hero-copy"><div class="caption">CREATE A NEW TRIP</div><h2 class="h2" style="margin:6px 0">旅程づくりは、AIにまかせよう。</h2><p class="small">行き先と気分を伝えるだけ。</p></div></div>'+
     '<button class="btn primary" style="margin-top:14px" data-action="new-trip">✨ AIに旅を考えてもらう</button>'+
     '<div class="section"><div class="row between"><h3 class="h3">これまでの旅</h3><button class="back" data-action="tab" data-tab="memories" style="font-size:13px">すべて見る</button></div>'+
     '<div class="card pad" style="margin-top:10px"><p class="muted small">まだ旅の記録はありません。最初の旅をつくってみましょう。</p></div></div>'+
@@ -58,7 +68,7 @@ function plannedHome(active){
 function createTrip(){
   return '<section class="screen no-nav">'+top("旅をつくる",true)+'<div class="content">'+
     '<h1 class="h1">どんな旅にする？</h1><p class="body muted" style="margin-top:7px">ざっくり教えてくれれば、ATTA! AIが旅程をつくります。</p>'+
-    '<div class="field"><label class="label">希望をひとことで</label><textarea class="textarea" id="wish">京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。</textarea></div>'+
+    '<div class="planner-preview"><span>KYOTO · 3 DAYS · AI ROUTE</span></div><div class="field"><label class="label">希望をひとことで</label><textarea class="textarea" id="wish">京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。</textarea></div>'+
     '<div class="field"><label class="label">行き先</label><input class="input" id="destination" value="京都"></div>'+
     '<div class="field"><label class="label">旅行期間</label><div class="card date-card"><span>9月21日</span><span>→</span><span>9月23日</span><strong>2泊3日</strong></div></div>'+
     '<div class="field"><label class="label">誰と？</label>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
@@ -81,7 +91,7 @@ const spots=[
 ];
 function itinerary(){
   return '<section class="screen no-nav">'+top("旅のしおり",true)+'<div class="content">'+
-    '<div class="hero trip-photo"><div class="hero-copy"><div class="caption">2026.09.21 - 09.23 · 家族4人</div><h1 class="h2" style="margin-top:6px">京都で見つける、家族の3日間</h1></div></div>'+
+    '<div class="hero trip-photo"><div class="hand-note">3 days in Kyoto</div><div class="postmark">KYOTO<br>21 SEP</div><svg class="route-doodle" viewBox="0 0 370 282" preserveAspectRatio="none"><path d="M40 220 C90 190,112 207,143 174 S210 116,254 147 S306 116,334 65"/><circle cx="40" cy="220" r="5"/><circle cx="334" cy="65" r="5"/></svg><div class="hero-copy"><div class="caption">2026.09.21 - 09.23 · 家族4人</div><h1 class="h2" style="margin-top:6px">京都で見つける、家族の3日間</h1></div></div>'+
     '<div class="ai section"><div class="ai-tag">ATTA! AI</div><p class="small" style="margin-top:5px">子どもが飽きにくく、移動を詰め込みすぎない3日間にしました。スタンプ10個を自然に集められます。</p></div>'+
     '<div class="section pills"><button class="chip on">DAY 1</button><button class="chip">DAY 2</button><button class="chip">DAY 3</button></div>'+
     '<div class="timeline section">'+spots.map((s,i)=>'<div class="tl" data-action="'+(i===3?'spot':'noop')+'"><div class="caption muted">'+s[0]+'</div><div class="spot-row"><div class="thumb" style="background-image:url('+s[3]+')"></div><div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div><div class="stamp-tag">'+(i>0?'STAMP':'')+'</div></div></div>').join("")+'</div>'+
@@ -101,7 +111,7 @@ function location(){
 function liveMap(updated){
   return '<section class="screen no-nav">'+top("京都 2泊3日",true)+'<div class="map">'+
     '<svg class="route" viewBox="0 0 400 420" preserveAspectRatio="none"><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="white" stroke-width="9" stroke-linecap="round"/><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="#052d46" stroke-width="3" stroke-dasharray="8 9" stroke-linecap="round"/></svg>'+
-    '<div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
+    '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
     '<div class="map-controls"><button data-action="locate">◎</button><button data-action="assistant">✨</button></div>'+
     '<div class="map-sheet"><div class="caption" style="font-weight:900;color:var(--red)">NEXT</div><div class="row between" style="margin-top:5px"><div><div class="h3">'+(updated?'天龍寺':'竹林の小径')+'</div><div class="small muted">京都・嵐山</div></div><div style="text-align:right"><strong>'+(updated?'15:20':'14:35')+'</strong><div class="small muted">'+(updated?'徒歩 9分':'あと18分')+'</div></div></div><button class="btn primary" style="margin-top:12px" data-action="'+(updated?'next-spot':'spot')+'">'+(updated?'次のスポットを見る':'スポットを見る')+'</button>'+(updated?'<button class="btn ghost" data-action="finish-trip">旅を終了</button>':'<button class="btn ghost" data-action="simulate-arrival">デモ：到着をシミュレート</button>')+'</div></div></section>';
 }
@@ -115,7 +125,7 @@ function arrival(){
   return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center"><div class="loader"></div><div class="brand">ATTA<i>!</i></div><h1 class="h2" style="margin-top:18px">竹林の小径に到着しました。</h1><p class="small muted" style="margin-top:7px">位置情報を確認しています…</p></div></div></section>';
 }
 function stamp(){
-  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center">'+brand()+'<h1 class="h2" style="margin-top:12px">新しい発見が、あなたの旅を特別にする。</h1><div class="big-stamp">竹林を<br>歩こう<br><span style="font-size:12px">ARASHIYAMA</span></div><div class="h3">京都・嵐山</div><p class="small muted" style="margin-top:5px">'+state.stamps+' / 10 STAMPS</p><button class="btn red" style="margin-top:26px" data-action="memory">📷 写真を残す</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></div></section>';
+  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center"><div class="passport-kicker">✦ DISCOVERED IN KYOTO</div>'+brand()+'<h1 class="h2" style="margin-top:12px">新しい発見が、あなたの旅を特別にする。</h1><div class="big-stamp">竹林を<br>歩こう<br><span style="font-size:12px">ARASHIYAMA</span></div><div class="h3">京都・嵐山</div><p class="small muted" style="margin-top:5px">'+state.stamps+' / 10 STAMPS</p><div class="handwritten" style="margin-top:12px">one more memory collected.</div><button class="btn red" style="margin-top:22px" data-action="memory">📷 写真を残す</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></div></section>';
 }
 function memory(){
   return '<section class="screen no-nav">'+top("思い出を追加",true)+'<div class="content"><h1 class="h1">この瞬間を残そう</h1><p class="body muted" style="margin-top:6px">長文は不要。写真とひとことだけで十分です。</p><label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none"><div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div><button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✨ AIでひとことを作る</button><button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button></div></section>';
