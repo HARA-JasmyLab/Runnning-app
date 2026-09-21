@@ -180,3 +180,15 @@ MAPBOX_STYLE_URL=mapbox://styles/mapbox/dark-v11
 - 天龍寺
 
 「現在地」ボタンは位置情報許可後、端末の現在地へMapを移動します。
+
+
+### Mapbox token bootstrap for protected prototype
+
+If the Vercel project environment variable is not yet writable from the connected tooling, the prototype supports a browser-local Public token without committing it to GitHub.
+
+- Open ATTA! → menu → **Mapbox Public Tokenを設定**
+- Paste a `pk.` Public token
+- The browser stores it in localStorage and immediately re-renders the Live Map
+- A one-time `?mapbox_token=pk...` query is also supported; ATTA! stores it locally and removes it from the visible URL with `history.replaceState`
+
+GitHub secret scanning is intentionally not bypassed. The token is never committed to repository source.
