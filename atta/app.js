@@ -11,7 +11,23 @@ const sheet = document.querySelector("#sheet");
 const toastEl = document.querySelector("#toast");
 const offline = document.querySelector("#offline");
 const ATTA_CONFIG = window.ATTA_CONFIG || {};
-const MAPBOX_TOKEN = ATTA_CONFIG.MAPBOX_PUBLIC_TOKEN || "";
+function resolveMapboxToken(){
+  const params=new URLSearchParams(location.search);
+  const oneTime=params.get("mapbox_token");
+  if(oneTime && oneTime.startsWith("pk.")){
+    try{ localStorage.setItem("atta-mapbox-public-token",oneTime); }catch{}
+    params.delete("mapbox_token");
+    const clean=location.pathname+(params.toString()?"?"+params.toString():"")+location.hash;
+    history.replaceState(null,"",clean);
+    return oneTime;
+  }
+  try{
+    return ATTA_CONFIG.MAPBOX_PUBLIC_TOKEN || localStorage.getItem("atta-mapbox-public-token") || "";
+  }catch{
+    return ATTA_CONFIG.MAPBOX_PUBLIC_TOKEN || "";
+  }
+}
+let MAPBOX_TOKEN = resolveMapboxToken();
 const MAPBOX_STYLE = ATTA_CONFIG.MAPBOX_STYLE_URL || "mapbox://styles/mapbox/dark-v11";
 
 const KYOTO_MAP = {
@@ -382,7 +398,20 @@ document.addEventListener("click",e=>{
       toast("現在地を更新しました");
     },()=>toast("現在地を取得できませんでした"),{enableHighAccuracy:true,timeout:8000,maximumAge:5000});
   }
-  else if(a==="menu") openSheet('<div class="row between"><h2 class="h2">ATTA!</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:10px">Golden Path v1.0 プロトタイプ</p><button class="btn secondary" style="margin-top:18px" data-action="reset">デモを最初からやり直す</button>');
+  else if(a==="menu") openSheet('<div class="row between"><h2 class="h2">ATTA!</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:10px">Golden Path v1.0 プロトタイプ</p><div class="card pad section"><div class="row between"><div><strong>Mapbox</strong><div class="small muted">'+(MAPBOX_TOKEN?'接続済み':'OSM fallback')+'</div></div><span class="stamp-tag">'+(MAPBOX_TOKEN?'LIVE':'READY')+'</span></div></div><button class="btn secondary" style="margin-top:12px" data-action="mapbox-config">Mapbox Public Tokenを設定</button><button class="btn secondary" style="margin-top:8px" data-action="reset">デモを最初からやり直す</button>');
+  else if(a==="mapbox-config"){
+    openSheet('<div class="row between"><h2 class="h2">Mapbox設定</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="small muted" style="margin-top:8px">pk. から始まるPublic tokenのみ保存します。Secret tokenは入力しないでください。</p><div class="field"><label class="label">Public token</label><input id="mapboxTokenInput" class="input" autocomplete="off" placeholder="pk...."></div><button class="btn primary" style="margin-top:16px" data-action="save-mapbox-token">保存してMapを再読込</button>');
+  }
+  else if(a==="save-mapbox-token"){
+    const input=document.querySelector("#mapboxTokenInput");
+    const value=(input?.value||"").trim();
+    if(!value.startsWith("pk.")){ toast("Mapbox Public token（pk.）を入力してください"); return; }
+    try{ localStorage.setItem("atta-mapbox-public-token",value); }catch{}
+    MAPBOX_TOKEN=value;
+    closeSheet();
+    toast("Mapboxを接続しました");
+    render();
+  }
   else if(a==="close-sheet") closeSheet();
   else if(a==="reset"){ closeSheet(); localStorage.removeItem(KEY); state=Object.assign({},defaults); location.hash=""; render(); toast("デモデータをリセットしました"); }
   else if(a==="tab"){ const t=el.dataset.tab; if(t==="home") go(state.tripStatus==="active"?"home-active":state.tripStatus==="none"?"home-empty":"home-planned"); if(t==="plan") go("plans"); if(t==="memories") go("memories"); if(t==="profile") go("profile"); }
