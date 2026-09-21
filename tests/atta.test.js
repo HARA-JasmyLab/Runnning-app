@@ -23,3 +23,18 @@ test('ATTA protects live location in share copy', async () => {
   const js = await readFile('atta/app.js','utf8');
   assert.match(js, /現在地はリアルタイムでは共有しません/);
 });
+
+
+test('ATTA live map is wired to Mapbox GL JS with Kyoto coordinates', async () => {
+  const html = await readFile('atta/index.html','utf8');
+  const js = await readFile('atta/app.js','utf8');
+  const build = await readFile('scripts/build.mjs','utf8');
+
+  assert.match(html, /mapbox-gl-js\/v3\.30\.0\/mapbox-gl\.js/);
+  assert.match(html, /mapbox-gl-js\/v3\.30\.0\/mapbox-gl\.css/);
+  assert.match(js, /135\.67133,35\.01718/);
+  assert.match(js, /directions\/v5\/mapbox\/walking/);
+  assert.match(js, /tile\.openstreetmap\.org/);
+  assert.match(build, /MAPBOX_PUBLIC_TOKEN/);
+  assert.match(build, /MAPBOX_STYLE_URL/);
+});
