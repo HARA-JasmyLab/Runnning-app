@@ -10,12 +10,118 @@ const overlay = document.querySelector("#overlay");
 const sheet = document.querySelector("#sheet");
 const toastEl = document.querySelector("#toast");
 const offline = document.querySelector("#offline");
+const ATTA_CONFIG = window.ATTA_CONFIG || {};
+const MAPBOX_TOKEN = ATTA_CONFIG.MAPBOX_PUBLIC_TOKEN || "";
+const MAPBOX_STYLE = ATTA_CONFIG.MAPBOX_STYLE_URL || "mapbox://styles/mapbox/dark-v11";
+
+const KYOTO_MAP = {
+  fallbackCenter:[135.6732,35.0154],
+  current:[135.67755,35.01308],
+  bamboo:[135.67133,35.01718],
+  tenryuji:[135.67382,35.01573],
+  nogu:[135.67425,35.01762]
+};
+let liveMapInstance = null;
+let liveUserMarker = null;
+let liveWatchId = null;
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 function go(screen, patch){ state = Object.assign({}, state, patch || {}, {screen}); save(); render(); window.scrollTo(0,0); }
 function toast(message){ toastEl.textContent=message; toastEl.classList.add("show"); clearTimeout(toastEl._t); toastEl._t=setTimeout(()=>toastEl.classList.remove("show"),2200); }
 function openSheet(html){ sheet.innerHTML=html; overlay.classList.add("open"); overlay.setAttribute("aria-hidden","false"); }
 function closeSheet(){ overlay.classList.remove("open"); overlay.setAttribute("aria-hidden","true"); }
+function destroyLiveMap(){
+  if(liveWatchId!=null && navigator.geolocation){ navigator.geolocation.clearWatch(liveWatchId); liveWatchId=null; }
+  if(liveMapInstance){ try{ liveMapInstance.remove(); }catch{} liveMapInstance=null; liveUserMarker=null; }
+}
+function routeCacheKey(updated){ return updated ? "atta-route-tenryuji-v1" : "atta-route-bamboo-v1"; }
+function fallbackRoute(updated){
+  return {
+    type:"Feature",
+    geometry:{type:"LineString",coordinates:updated
+      ? [KYOTO_MAP.bamboo,KYOTO_MAP.tenryuji]
+      : [KYOTO_MAP.current,KYOTO_MAP.nogu,KYOTO_MAP.bamboo]},
+    properties:{}
+  };
+}
+async function fetchWalkingRoute(updated){
+  const key=routeCacheKey(updated);
+  try{
+    const cached=sessionStorage.getItem(key);
+    if(cached) return JSON.parse(cached);
+  }catch{}
+  const points=updated ? [KYOTO_MAP.bamboo,KYOTO_MAP.tenryuji] : [KYOTO_MAP.current,KYOTO_MAP.nogu,KYOTO_MAP.bamboo];
+  const coords=points.map(p=>p.join(",")).join(";");
+  try{
+    const response=await fetch("https://api.mapbox.com/directions/v5/mapbox/walking/"+coords+"?geometries=geojson&overview=full&steps=false&access_token="+encodeURIComponent(MAPBOX_TOKEN));
+    if(!response.ok) throw new Error("Directions "+response.status);
+    const data=await response.json();
+    const geometry=data.routes && data.routes[0] && data.routes[0].geometry;
+    if(!geometry) throw new Error("No route");
+    const feature={type:"Feature",geometry,properties:{}};
+    try{ sessionStorage.setItem(key,JSON.stringify(feature)); }catch{}
+    return feature;
+  }catch(err){
+    console.warn("ATTA Mapbox Directions fallback",err);
+    return fallbackRoute(updated);
+  }
+}
+function markerEl(kind,label){
+  const el=document.createElement("button");
+  el.type="button";
+  el.className="atta-map-marker "+kind;
+  el.setAttribute("aria-label",label);
+  el.innerHTML=kind==="current" ? '<span class="pulse-dot"></span>' : kind==="next" ? '<span class="marker-num">7</span>' : '<span class="marker-check">✓</span>';
+  return el;
+}
+async function initMapboxMap(updated){
+  const container=document.querySelector("#mapboxMap");
+  const shell=document.querySelector(".map");
+  if(!container || !shell) return;
+  if(!MAPBOX_TOKEN || !window.mapboxgl){
+    shell.classList.add("mapbox-unavailable");
+    return;
+  }
+  try{
+    window.mapboxgl.accessToken=MAPBOX_TOKEN;
+    liveMapInstance=new window.mapboxgl.Map({
+      container,
+      style:MAPBOX_STYLE,
+      center:updated ? [135.6728,35.0164] : [135.6741,35.0153],
+      zoom:15.4,
+      bearing:-14,
+      pitch:38,
+      attributionControl:true,
+      cooperativeGestures:false
+    });
+    liveMapInstance.addControl(new window.mapboxgl.NavigationControl({showCompass:false}),"top-right");
+    liveMapInstance.once("load",async()=>{
+      shell.classList.add("mapbox-live");
+      const route=await fetchWalkingRoute(updated);
+      if(!liveMapInstance) return;
+      liveMapInstance.addSource("atta-route",{type:"geojson",data:route});
+      liveMapInstance.addLayer({id:"atta-route-casing",type:"line",source:"atta-route",paint:{"line-color":"#ffffff","line-width":8,"line-opacity":0.96}});
+      liveMapInstance.addLayer({id:"atta-route-line",type:"line",source:"atta-route",paint:{"line-color":"#ff355c","line-width":4,"line-opacity":1}});
+      new window.mapboxgl.Marker({element:markerEl("visited","渡月橋")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
+      new window.mapboxgl.Marker({element:markerEl(updated?"visited":"next",updated?"竹林の小径・訪問済み":"竹林の小径")}).setLngLat(KYOTO_MAP.bamboo).addTo(liveMapInstance);
+      new window.mapboxgl.Marker({element:markerEl("visited","野宮神社")}).setLngLat(KYOTO_MAP.nogu).addTo(liveMapInstance);
+      if(updated) new window.mapboxgl.Marker({element:markerEl("next","天龍寺")}).setLngLat(KYOTO_MAP.tenryuji).addTo(liveMapInstance);
+      liveUserMarker=new window.mapboxgl.Marker({element:markerEl("current","現在地")}).setLngLat(KYOTO_MAP.current).addTo(liveMapInstance);
+
+      if(state.locationGranted && navigator.geolocation){
+        liveWatchId=navigator.geolocation.watchPosition(pos=>{
+          if(!liveMapInstance || !liveUserMarker) return;
+          const coords=[pos.coords.longitude,pos.coords.latitude];
+          liveUserMarker.setLngLat(coords);
+        },()=>{}, {enableHighAccuracy:true,maximumAge:10000,timeout:12000});
+      }
+    });
+    liveMapInstance.on("error",e=>console.warn("ATTA Mapbox",e && e.error ? e.error : e));
+  }catch(err){
+    console.warn("ATTA Mapbox init fallback",err);
+    shell.classList.add("mapbox-unavailable");
+  }
+}
 function brand(){ return '<div class="brand">ATTA<i>!</i></div>'; }
 function top(title, back){ return '<div class="topbar">'+(back===false?brand():'<button class="back" data-action="back">‹</button>')+(title?'<strong>'+title+'</strong>':'')+'<button class="icon-btn" data-action="menu">•••</button></div>'; }
 function icon(name){
@@ -110,9 +216,13 @@ function location(){
 }
 function liveMap(updated){
   return '<section class="screen no-nav">'+top("京都 2泊3日",true)+'<div class="map">'+
-    '<svg class="route" viewBox="0 0 400 420" preserveAspectRatio="none"><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="white" stroke-width="9" stroke-linecap="round"/><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="#052d46" stroke-width="3" stroke-dasharray="8 9" stroke-linecap="round"/></svg>'+
-    '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
-    '<div class="map-controls"><button data-action="locate">◎</button><button data-action="assistant">✨</button></div>'+
+    '<div id="mapboxMap" class="mapbox-canvas" aria-label="京都・嵐山のライブ旅マップ"></div>'+
+    '<div class="map-fallback" aria-hidden="true">'+
+      '<svg class="route" viewBox="0 0 400 420" preserveAspectRatio="none"><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="white" stroke-width="9" stroke-linecap="round"/><path d="M42 342 C120 300,80 240,166 215 S240 150,306 105 S350 66,370 38" fill="none" stroke="#ff355c" stroke-width="3" stroke-dasharray="8 9" stroke-linecap="round"/></svg>'+
+      '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
+    '</div>'+
+    '<div class="map-status"><span class="map-status-live">LIVE MAP</span><span class="map-status-fallback">MAPBOX READY</span></div>'+
+    '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button><button data-action="assistant" aria-label="ATTA AI">✨</button></div>'+
     '<div class="map-sheet"><div class="caption" style="font-weight:900;color:var(--red)">NEXT</div><div class="row between" style="margin-top:5px"><div><div class="h3">'+(updated?'天龍寺':'竹林の小径')+'</div><div class="small muted">京都・嵐山</div></div><div style="text-align:right"><strong>'+(updated?'15:20':'14:35')+'</strong><div class="small muted">'+(updated?'徒歩 9分':'あと18分')+'</div></div></div><button class="btn primary" style="margin-top:12px" data-action="'+(updated?'next-spot':'spot')+'">'+(updated?'次のスポットを見る':'スポットを見る')+'</button>'+(updated?'<button class="btn ghost" data-action="finish-trip">旅を終了</button>':'<button class="btn ghost" data-action="simulate-arrival">デモ：到着をシミュレート</button>')+'</div></div></section>';
 }
 function spot(){
@@ -182,8 +292,12 @@ function render(){
     s==="plans"?plans():
     s==="memories"?memories():
     s==="profile"?profile():homeEmpty();
+  destroyLiveMap();
   app.innerHTML=html;
   bindFile();
+  if(s==="live-map" || s==="updated-map"){
+    requestAnimationFrame(()=>initMapboxMap(s==="updated-map"));
+  }
 }
 function bindFile(){
   const input=document.querySelector("#memoryFile");
@@ -241,7 +355,17 @@ document.addEventListener("click",e=>{
   else if(a==="assistant") assistant();
   else if(a.startsWith("assistant-")){ closeSheet(); toast(a==="assistant-fatigue"?"徒歩を約1.8km減らす案に変更できます":a==="assistant-rain"?"屋内中心のルートを提案しました":a==="assistant-hungry"?"近くのランチ候補を3件追加しました":"30分で寄れる場所を追加しました"); }
   else if(a==="ai-suggestion") toast("抹茶カフェを旅程に追加しました");
-  else if(a==="locate") toast(state.locationGranted?"現在地を更新しました":"位置情報はOFFです");
+  else if(a==="locate"){
+    if(!state.locationGranted || !navigator.geolocation){ toast("位置情報はOFFです"); }
+    else navigator.geolocation.getCurrentPosition(pos=>{
+      if(liveMapInstance){
+        const coords=[pos.coords.longitude,pos.coords.latitude];
+        liveUserMarker?.setLngLat(coords);
+        liveMapInstance.easeTo({center:coords,zoom:16,duration:700});
+      }
+      toast("現在地を更新しました");
+    },()=>toast("現在地を取得できませんでした"),{enableHighAccuracy:true,timeout:8000,maximumAge:5000});
+  }
   else if(a==="menu") openSheet('<div class="row between"><h2 class="h2">ATTA!</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:10px">Golden Path v1.0 プロトタイプ</p><button class="btn secondary" style="margin-top:18px" data-action="reset">デモを最初からやり直す</button>');
   else if(a==="close-sheet") closeSheet();
   else if(a==="reset"){ closeSheet(); localStorage.removeItem(KEY); state=Object.assign({},defaults); location.hash=""; render(); toast("デモデータをリセットしました"); }
