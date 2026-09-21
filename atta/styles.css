@@ -173,3 +173,33 @@ button{-webkit-tap-highlight-color:transparent}
   .card:hover{box-shadow:0 20px 42px #14384a18}
   .btn:hover{box-shadow:0 12px 28px #082d451a}
 }
+
+
+/* === ATTA! LIVE MAPBOX === */
+.mapbox-canvas{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .28s ease;background:#102731}
+.map.mapbox-live .mapbox-canvas{opacity:1}
+.map-fallback{position:absolute;inset:0;z-index:2;transition:opacity .2s ease}
+.map.mapbox-live .map-fallback{opacity:0;pointer-events:none}
+.map.mapbox-live:before,.map.mapbox-live:after{display:none}
+.mapboxgl-map{font:inherit}
+.mapboxgl-canvas{outline:none}
+.mapboxgl-ctrl-top-right{top:82px;right:4px}
+.mapboxgl-ctrl-bottom-right{bottom:172px;right:8px}
+.mapboxgl-ctrl-attrib{font-size:9px!important;background:rgba(255,255,255,.82)!important;border-radius:8px!important}
+.mapboxgl-ctrl-logo{opacity:.72}
+.map.mapbox-live .map-controls{top:170px;right:14px}
+.map.mapbox-live .map-controls button{background:rgba(255,255,255,.94);backdrop-filter:blur(12px)}
+.atta-map-marker{width:42px;height:42px;border:4px solid #fff;border-radius:50%;display:grid;place-items:center;padding:0;box-shadow:0 10px 25px rgba(0,0,0,.4);background:#fff;color:#0b8965;font-weight:950;cursor:pointer}
+.atta-map-marker.next{background:linear-gradient(145deg,#ff3a5f,#eb1746);color:#fff;box-shadow:0 0 0 8px rgba(255,53,92,.2),0 10px 25px rgba(0,0,0,.42)}
+.atta-map-marker.visited{background:linear-gradient(145deg,#fff,#edf5f1);color:#0b8965}
+.atta-map-marker.current{width:26px;height:26px;background:#2d83ff;border-width:5px;box-shadow:0 0 0 8px rgba(45,131,255,.18),0 8px 20px rgba(0,0,0,.3);pointer-events:none}
+.atta-map-marker .pulse-dot{width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.22)}
+.marker-num,.marker-check{line-height:1}
+.map-status{position:absolute;z-index:7;left:14px;top:14px;border-radius:999px;padding:7px 10px;background:rgba(5,45,70,.82);backdrop-filter:blur(12px);color:#fff;font-size:9px;font-weight:900;letter-spacing:.12em;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.map-status-live{display:none}.map.mapbox-live .map-status-live{display:inline}.map.mapbox-live .map-status-fallback{display:none}
+.map.mapbox-unavailable .map-status{background:rgba(255,255,255,.92);color:var(--ink)}
+.mapboxgl-popup-content{border-radius:16px!important;padding:10px 12px!important;font:inherit!important;color:var(--ink)!important}
+@media(max-width:380px){
+  .mapboxgl-ctrl-top-right{top:72px}
+  .mapboxgl-ctrl-bottom-right{bottom:168px}
+}
