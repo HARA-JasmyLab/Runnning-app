@@ -402,3 +402,76 @@ button{-webkit-tap-highlight-color:transparent}
   .photo-pin{width:68px;height:68px}.photo-pin span{left:72px}.photo-pin.p3 span{right:72px}
   .world-globe{left:34px;right:22px}.memory-world-hero{height:430px}
 }
+
+
+/* === ATTA! REFERENCE-LOCKED UI v4 === */
+.ref-home,.ref-memory,.ref-spot{background:#f4f6f8;color:#062f49}
+.ref-home-map{height:610px;position:relative;overflow:hidden;background:#082d43}
+.showcase-map{position:absolute;inset:0;z-index:1;background:#0a2638;opacity:0;transition:opacity .35s ease}
+.showcase-map.ready{opacity:1}
+.satellite-shade,.memory-space-shade,.spot-map-wash{position:absolute;inset:0;z-index:2;pointer-events:none}
+.satellite-shade{background:linear-gradient(180deg,rgba(0,22,37,.18),rgba(0,23,38,.05) 55%,rgba(0,21,35,.44) 100%)}
+.ref-map-header{position:absolute;left:16px;right:16px;top:calc(14px + env(safe-area-inset-top));z-index:7;display:flex;align-items:center;justify-content:space-between}
+.brand-white{color:#fff}.brand-navy{color:var(--atta-navy)}
+.ref-segment{background:rgba(7,37,57,.72);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.ref-segment button{font-size:13px;padding:8px 17px}
+.ref-trip-meta{position:absolute;left:18px;top:calc(92px + env(safe-area-inset-top));z-index:7;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.ref-trip-meta>span{display:block;font-size:14px;font-weight:800}
+.ref-trip-meta>strong{display:block;font-size:50px;line-height:.95;letter-spacing:-2px;margin-top:4px}.ref-trip-meta>strong b{font-size:20px}
+.ref-trip-meta>small{display:block;font-size:13px;font-weight:800;margin-top:9px}
+.ref-photo-pin{position:absolute;z-index:8;width:70px;height:70px;border:4px solid #fff;border-radius:50%;box-shadow:0 8px 22px rgba(0,0,0,.4);background:#fff}
+.ref-photo-pin i{position:absolute;inset:0;border-radius:50%;background-size:cover;background-position:center}
+.ref-photo-pin span{position:absolute;color:#fff;font-size:13px;font-weight:900;white-space:nowrap;text-shadow:0 2px 7px #000;top:22px;left:74px}
+.pin-miyajima{left:40px;bottom:74px}.pin-miyajima i{background-image:url("https://images.unsplash.com/photo-1577702312706-e23ff063064f?auto=format&fit=crop&w=260&q=85")}
+.pin-hiroshima{left:84px;bottom:180px}.pin-hiroshima i{background-image:url("https://images.unsplash.com/photo-1599619351208-3e6c839d6828?auto=format&fit=crop&w=260&q=85")}
+.pin-kyoto{left:165px;bottom:248px}.pin-kyoto i{background-image:url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=260&q=85")}
+.pin-fuji{right:74px;bottom:168px}.pin-fuji i{background-image:url("https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=260&q=85")}.pin-fuji span{left:74px}
+.pin-tokyo{right:53px;top:195px}.pin-tokyo i{background-image:url("https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?auto=format&fit=crop&w=260&q=85")}.pin-tokyo span{left:72px}
+.plane-glyph{position:absolute;z-index:7;color:#fff;font-size:34px;text-shadow:0 3px 9px rgba(0,0,0,.4);transform:rotate(-17deg)}.plane-a{left:222px;bottom:224px}.plane-b{left:202px;bottom:95px;transform:rotate(12deg)}
+.current-dot{position:absolute;z-index:8;left:31px;bottom:44px;width:23px;height:23px;border-radius:50%;background:#2f8cff;border:4px solid #fff;box-shadow:0 0 0 6px rgba(47,140,255,.22)}
+.ref-locate{position:absolute;right:20px;bottom:34px;z-index:9;width:58px;height:58px;border:0;border-radius:50%;background:rgba(5,36,55,.88);color:#fff;font-size:25px;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.ref-home-sheet{position:relative;z-index:10;margin-top:-12px;padding:0 12px 100px;background:linear-gradient(180deg,rgba(244,246,248,.98),#f7f8fa 70%);border-radius:22px 22px 0 0}
+.ref-stamp-card{width:100%;border:0;background:#fff;border-radius:20px;display:grid;grid-template-columns:76px 1fr 72px 18px;gap:10px;align-items:center;text-align:left;padding:12px;box-shadow:0 8px 24px rgba(8,42,63,.08)}
+.ref-stamp-image{width:76px;height:76px;border-radius:15px;background-image:url("https://images.unsplash.com/photo-1577702312706-e23ff063064f?auto=format&fit=crop&w=300&q=85");background-size:cover;background-position:center}
+.ref-stamp-copy small,.ref-stamp-copy span{display:block;color:#617483;font-size:11px}.ref-stamp-copy strong{display:block;font-size:16px;margin:5px 0;color:#082f49}
+.ref-stamp-seal{width:68px;height:68px;border:2px solid var(--atta-pink);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--atta-pink);font-size:11px;font-weight:950;transform:rotate(-8deg);box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px var(--atta-pink)}
+.ref-move-card{margin-top:10px;background:#fff;border-radius:20px;padding:13px;box-shadow:0 8px 24px rgba(8,42,63,.06)}.ref-move-card h3{margin:0 0 10px;font-size:14px}
+.ref-movement{gap:7px}.ref-movement>div{box-shadow:none;background:#f7f8fa}.ref-movement span{display:block;font-size:11px;color:#516879}.ref-movement strong{font-size:13px}
+.ref-home .bottom-nav,.ref-memory .bottom-nav{background:rgba(255,255,255,.97)}
+.ref-home .nav-item[data-tab="home"]{color:#fff}
+
+/* Reference-accurate memories screen */
+.ref-memory{background:#f4f6f8}
+.ref-memory-hero{height:500px;position:relative;overflow:hidden;background:#061d2b}
+.globe-map{background:#020b13}
+.memory-space-shade{background:
+  radial-gradient(circle at 50% 52%,transparent 0 45%,rgba(0,15,25,.18) 67%,rgba(0,13,23,.55) 100%),
+  linear-gradient(180deg,rgba(0,13,22,.06),rgba(0,16,28,.42))}
+.ref-memory-header{position:absolute;z-index:6;left:17px;right:17px;top:calc(15px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between}
+.share-circle{width:48px;height:48px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:23px;backdrop-filter:blur(10px)}
+.ref-memory-hero h1{position:absolute;z-index:6;left:20px;top:calc(103px + env(safe-area-inset-top));margin:0;color:#fff;font-size:29px;line-height:1.16;letter-spacing:-.8px;text-shadow:0 2px 10px rgba(0,0,0,.35)}
+.memory-hand{position:absolute;right:27px;bottom:28px;z-index:6;color:#fff;font-family:"Marker Felt","Bradley Hand","Hannotate SC",cursive;font-size:17px;line-height:1.4;transform:rotate(-4deg);text-shadow:0 2px 8px #000}
+.ref-memory-sheet{position:relative;z-index:8;margin-top:-20px;background:#f8fafb;border-radius:24px 24px 0 0;padding:18px 14px 100px}
+.ref-memory-sheet h2{font-size:19px;margin:0}.ref-memory-sheet h3{font-size:14px;margin:16px 0 8px}
+.ref-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.ref-stats>div{background:#fff;border-radius:19px;padding:15px;box-shadow:0 8px 22px rgba(6,43,64,.07)}.ref-stats b{font-size:26px}.ref-stats strong{font-size:30px;display:block;margin-top:2px}.ref-stats strong span{font-size:13px}.ref-stats small{color:#617483;font-size:11px}
+.ref-continents{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.ref-continents span{font-size:9px;text-align:center;padding:9px 2px;border-radius:12px;background:#eef7ef;color:#23583e}.ref-continents span:nth-child(2){background:#eaf4ff;color:#256e9e}.ref-continents span:nth-child(3){background:#fff0df;color:#8c5b26}.ref-continents span:nth-child(4){background:#fdeaf0;color:#a84d67}.ref-continents span:nth-child(5){background:#f1eafa;color:#72519b}.ref-continents span:nth-child(6){background:#e8f7f6;color:#287d7a}.ref-continents b{display:block;margin-top:4px}
+.ref-collection{width:100%;border:0;background:#fff;border-radius:20px;margin-top:14px;padding:13px;display:grid;grid-template-columns:52px 1fr 18px;gap:10px;align-items:center;text-align:left;box-shadow:0 8px 22px rgba(6,43,64,.07)}.ref-collection strong{font-size:14px}.ref-collection p{margin:3px 0}.ref-collection p b{font-size:25px}.ref-collection small{color:#617483}
+
+/* Reference-accurate spot detail */
+.ref-spot{background:#fff}
+.ref-spot-map{height:300px;position:relative;overflow:hidden;background:#cbe8e8}
+.spot-map-wash{background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.35))}
+.ref-spot-header{position:absolute;left:16px;right:16px;top:calc(14px + env(safe-area-inset-top));z-index:8;display:flex;align-items:center;justify-content:space-between}
+.spot-map-label{position:absolute;z-index:8;right:72px;bottom:46px;background:#fff;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:850;box-shadow:0 8px 24px rgba(5,45,70,.14)}.spot-map-label span{color:var(--atta-pink)}
+.map-photo-bubble{position:absolute;z-index:8;width:70px;height:70px;border-radius:50%;border:4px solid #fff;background-size:cover;background-position:center;box-shadow:0 8px 20px rgba(5,45,70,.2)}.map-photo-bubble.b1{left:32px;bottom:35px;background-image:url("https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=300&q=85")}.map-photo-bubble.b2{left:86px;bottom:96px;background-image:url("https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=300&q=85")}
+.ref-place-card{position:relative;z-index:9;margin:-18px 10px 0;background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -9px 30px rgba(6,43,64,.08);overflow:hidden}
+.ref-place-photo{height:330px;position:relative;border-radius:23px;margin:10px;background-size:cover;background-position:center}
+.ref-back{position:absolute;left:14px;top:14px;width:46px;height:46px;border:0;border-radius:50%;background:rgba(5,45,70,.52);color:#fff;font-size:30px;backdrop-filter:blur(8px)}
+.ref-counter{position:absolute;right:14px;top:14px;background:rgba(5,45,70,.55);color:#fff;border-radius:999px;padding:7px 12px;font-size:12px}
+.heart{position:absolute;right:14px;bottom:14px;width:54px;height:54px;border:0;border-radius:50%;background:#fff;color:var(--atta-pink);font-size:30px;box-shadow:0 7px 20px rgba(0,0,0,.15)}
+.ref-place-content{padding:6px 17px 34px}.ref-place-content h1{font-size:32px;margin:0;letter-spacing:-1px}.ref-place-content p{margin:5px 0}.place-map-btn{width:74px;height:72px;border:0;border-radius:20px;background:#fff;box-shadow:0 9px 22px rgba(5,45,70,.11);display:grid;place-items:center;color:var(--atta-navy);font-size:22px}.place-map-btn span{font-size:9px;font-weight:850}
+.place-description{font-size:15px;line-height:1.7;color:#25465a;margin-top:14px!important}.ref-tags{margin-top:13px}.nearby-title{margin-top:24px}.nearby-title h3{font-size:16px;margin:0}.ref-nearby{margin-top:10px}.ref-nearby .nearby-img{height:104px}
+@media(max-width:380px){
+  .ref-home-map{height:570px}.ref-trip-meta>strong{font-size:44px}.ref-photo-pin{width:62px;height:62px}.ref-photo-pin span{left:66px}
+  .pin-kyoto{left:148px}.pin-tokyo{right:40px}.ref-memory-hero{height:460px}.ref-place-photo{height:300px}
+}
