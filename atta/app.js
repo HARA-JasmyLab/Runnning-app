@@ -4,7 +4,8 @@ const defaults = {
   diaryReady:false, locationGranted:false, day:1, selectedDay:1, image:null, note:"",
   interests:["グルメ","絶景","子ども向け"], companion:"家族", pace:"バランス",
   builderWish:"京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。",
-  builderDestination:"京都", aiAdjustment:null, aiPlanVersion:1
+  builderDestination:"京都", aiAdjustment:null, aiPlanVersion:1,
+  onboardingCompleted:false, tutorialStep:0, onboardingDestination:"京都"
 };
 let state = Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || "{}"));
 const app = document.querySelector("#app");
@@ -296,6 +297,35 @@ function stampStrip(count){
 }
 function stats(){ return '<div class="stats"><div class="stat"><strong>6</strong><span class="caption">Spot</span></div><div class="stat"><strong>'+state.stamps+'</strong><span class="caption">Stamp</span></div><div class="stat"><strong>18</strong><span class="caption">Photos</span></div><div class="stat"><strong>8.2</strong><span class="caption">km</span></div></div>'; }
 
+function silvaIntro(){
+  return '<section class="screen no-nav silva-onboarding">'+
+    '<div class="silva-sky">'+
+      '<div class="silva-brand">'+brand("navy")+'</div>'+
+      '<div class="silva-stage"><div class="silva-halo"></div><img class="silva-hero" src="/assets/silva.svg" alt="旅の案内役 しるべ"></div>'+
+      '<div class="silva-dialogue intro"><div class="silva-name"><strong>しるべ</strong><span>Silva · 旅の案内役</span></div><h1>はじめまして。<br>しるべです。</h1><p>まだ知らない景色を、<br>あなたと一緒に見つけに行きたいな。</p></div>'+
+    '</div>'+
+    '<div class="silva-onboarding-bottom"><div class="tutorial-dots"><i class="on"></i><i></i><i></i><i></i></div><button class="btn primary silva-next" data-action="tutorial-next">よろしく、しるべ！ <span>→</span></button><button class="tutorial-skip" data-action="tutorial-skip">あとで見る</button></div>'+
+  '</section>';
+}
+function silvaTutorial(){
+  const step=Math.max(1,Math.min(3,state.tutorialStep||1));
+  const data={
+    1:{kicker:"PLAN",title:"行きたい場所を<br>しるべに話してみて。",body:"場所・日程・誰と行くか。ざっくり伝えるだけで、移動時間や営業時間まで考えて旅の流れをつくるよ。",visual:"plan"},
+    2:{kicker:"DISCOVER",title:"旅先では、<br>ATTA!を見つけよう。",body:"スポットに着くとスタンプを自動でGET。地図には歩いた道と見つけた景色が少しずつ増えていくよ。",visual:"discover"},
+    3:{kicker:"REMEMBER",title:"旅が終わったら、<br>思い出がパスポートに残る。",body:"写真・ルート・スタンプから旅日記をまとめるよ。旅するほど、あなたの世界地図が育っていく。",visual:"remember"}
+  }[step];
+  const dots=[0,1,2,3].map((_,i)=>'<i class="'+(i===step?'on':'')+'"></i>').join("");
+  const art=data.visual==="plan"
+    ? '<div class="tutorial-plan-card"><div class="tiny-silva"><img src="/assets/silva.svg" alt=""></div><div><small>しるべに相談</small><strong>京都、家族4人、2泊3日。<br>寺とグルメ、歩きすぎない旅。</strong></div><b>→</b></div>'
+    : data.visual==="discover"
+    ? '<div class="tutorial-map-art"><div class="tutorial-route"></div><span class="t-pin a">京都</span><span class="t-pin b">嵐山</span><span class="t-stamp">ATTA!</span><img src="/assets/silva.svg" alt=""></div>'
+    : '<div class="tutorial-passport-art"><div class="mini-globe"></div><div class="passport-card-mini"><small>ATTA! PASSPORT</small><strong>7 STAMPS</strong><span>KYOTO</span></div><img src="/assets/silva.svg" alt=""></div>';
+  return '<section class="screen no-nav silva-onboarding tutorial-step-'+step+'">'+
+    '<div class="tutorial-top"><button class="tutorial-back" data-action="tutorial-back">‹</button>'+brand("navy")+'<button class="tutorial-skip" data-action="tutorial-skip">スキップ</button></div>'+
+    '<div class="tutorial-body"><div class="tutorial-kicker">'+data.kicker+'</div><h1>'+data.title+'</h1><p>'+data.body+'</p><div class="tutorial-visual">'+art+'</div></div>'+
+    '<div class="silva-onboarding-bottom"><div class="tutorial-dots">'+dots+'</div><button class="btn primary silva-next" data-action="'+(step===3?"tutorial-start-trip":"tutorial-next")+'">'+(step===3?"最初の旅をつくる":"次へ")+' <span>→</span></button></div>'+
+  '</section>';
+}
 function homeEmpty(){ return plannedHome(true); }
 function plannedHome(active){
   const isActive = active || state.tripStatus==="active";
@@ -563,6 +593,13 @@ function profile(){
 
 function render(){
   if(location.hash==="#story" && state.screen!=="story") state.screen="story";
+  if(!state.onboardingCompleted && location.hash!=="#story"){
+    const step=Number(state.tutorialStep||0);
+    destroyLiveMap();
+    app.innerHTML=step===0?silvaIntro():silvaTutorial();
+    bindFile();
+    return;
+  }
   const s=state.screen;
   let html = s==="home-empty"?homeEmpty():
     s==="home-planned"?plannedHome(false):
@@ -620,7 +657,24 @@ function assistant(){
 document.addEventListener("click",e=>{
   const el=e.target.closest("[data-action]"); if(!el) return;
   const a=el.dataset.action;
-  if(a==="back") back();
+  if(a==="tutorial-next"){
+    state.tutorialStep=Math.min(3,Number(state.tutorialStep||0)+1);
+    save(); render(); window.scrollTo(0,0);
+  }
+  else if(a==="tutorial-back"){
+    state.tutorialStep=Math.max(0,Number(state.tutorialStep||1)-1);
+    save(); render(); window.scrollTo(0,0);
+  }
+  else if(a==="tutorial-skip"){
+    state.onboardingCompleted=true; state.tutorialStep=3; save(); go("home-active");
+  }
+  else if(a==="tutorial-start-trip"){
+    state.onboardingCompleted=true;
+    state.tutorialStep=3;
+    state.builderDestination=state.onboardingDestination||"京都";
+    save(); go("create");
+  }
+  else if(a==="back") back();
   else if(a==="new-trip") go("create");
   else if(a==="generate"){
     const wish=document.querySelector("#wish");
