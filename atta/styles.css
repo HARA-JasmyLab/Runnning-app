@@ -559,3 +559,134 @@ button{-webkit-tap-highlight-color:transparent}
   .planner-v4-hero{height:305px}.planner-v4-copy h1{font-size:30px}.planner-grid{grid-template-columns:1fr}
   .itinerary-v4-hero{height:310px}.itinerary-v4-copy h1{font-size:28px}.itinerary-card-v4{border-radius:17px}.itinerary-photo-v4{height:116px}
 }
+
+
+/* === ATTA! OPTION B BRAND SYSTEM === */
+:root{
+  --atta-brand-red:#FF4B5C;
+  --atta-brand-navy:#0B2D4A;
+  --atta-brand-gray:#E5EEF4;
+}
+.brand-lockup{
+  display:flex;
+  align-items:center;
+  width:auto;
+  height:auto;
+  line-height:1;
+  color:inherit;
+  text-shadow:none;
+}
+.brand-lockup img{
+  display:block;
+  width:164px;
+  height:auto;
+  max-height:58px;
+  object-fit:contain;
+  object-position:left center;
+}
+.brand-lockup.brand-white img{width:166px}
+.brand-lockup.brand-navy img{width:166px}
+.topbar .brand-lockup img{width:150px;max-height:48px}
+.ref-map-header .brand-lockup img,
+.ref-memory-header .brand-lockup img,
+.planner-v4-head .brand-lockup img,
+.itinerary-v4-head .brand-lockup img{width:148px}
+.generating-brand .brand-lockup img{width:154px}
+.brand-word,.brand-mark,.brand-bang,.brand-pin{display:none!important}
+
+.brand-stamp{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+}
+.brand-stamp.stamp-mini{width:66px;height:66px}
+.brand-stamp.stamp-hero{
+  width:min(282px,78vw);
+  margin:4px auto 8px;
+  filter:drop-shadow(0 14px 24px rgba(11,45,74,.08));
+  animation:brandStampImpact .52s cubic-bezier(.17,.89,.32,1.35);
+}
+@keyframes brandStampImpact{
+  0%{transform:scale(.48) rotate(-8deg);opacity:0}
+  70%{transform:scale(1.06) rotate(1deg);opacity:1}
+  100%{transform:scale(1) rotate(0)}
+}
+.brand-mark-img{display:block;width:100%;height:100%;object-fit:contain}
+.passport-mark{width:44px;height:44px}
+
+/* Existing stamp containers now frame the B logo rather than duplicating it */
+.ref-stamp-seal{
+  width:72px;
+  height:72px;
+  border:0;
+  border-radius:0;
+  display:grid;
+  place-items:center;
+  transform:none;
+  box-shadow:none;
+  overflow:visible;
+}
+.ref-stamp-seal .stamp-mini{width:72px;height:72px}
+.spot-stamp-seal{
+  width:62px;
+  height:62px;
+  border:0;
+  border-radius:0;
+  display:grid;
+  place-items:center;
+  transform:none;
+  box-shadow:none;
+}
+.spot-stamp-seal .stamp-mini{width:62px;height:62px}
+.passport-icon{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  background:#fff;
+  color:inherit;
+  display:grid;
+  place-items:center;
+  box-shadow:none;
+  overflow:hidden;
+}
+.passport-icon .brand-mark-img{width:48px;height:48px}
+
+/* Stamp acquisition now uses the official B emblem */
+.stamp-success-v2 .passport-kicker{
+  letter-spacing:.18em;
+  font-size:9px;
+  color:var(--atta-brand-navy);
+  font-weight:900;
+  margin-bottom:2px;
+}
+.stamp-success-v2 .h2{margin-top:0}
+.stamp-reward-line{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:12px;
+  border-radius:999px;
+  padding:7px 11px;
+  background:#fff;
+  color:var(--atta-brand-red);
+  border:1px solid #ffd5db;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(11,45,74,.06);
+}
+.stamp-reward-line span{
+  color:#71818c;
+  font-size:9px;
+  font-weight:800;
+}
+
+/* Brand color normalization */
+.red{background:var(--atta-brand-red)!important}
+.progress span{background:var(--atta-brand-red)}
+.stamp-tag{color:var(--atta-brand-red)}
+.itinerary-stamp{color:var(--atta-brand-red);border-color:var(--atta-brand-red)}
+.booking-price small,
+.spot-booking-copy span,
+.spot-section-title small,
+.reward-disclaimer+*{color:var(--atta-brand-red)}
