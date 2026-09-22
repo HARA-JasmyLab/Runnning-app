@@ -269,12 +269,12 @@ function icon(name){
   return icons[name]||'';
 }
 function nav(active){
-  const fourthId=active==="home"?"stampbook":"memories";
-  const fourthLabel=active==="home"?"スタンプ":"思い出";
   return '<nav class="bottom-nav">'+
-    item("home","home","ホーム",active)+item("plan","plan","プラン",active)+
+    item("home","home","ホーム",active)+
+    item("plan","plan","プラン",active)+
     '<button class="nav-plus" data-action="new-trip" aria-label="新しい旅">'+icon("plus")+'</button>'+
-    item(fourthId,"memories",fourthLabel,active)+item("profile","profile","マイページ",active)+
+    item("passport","memories","パスポート",active)+
+    item("profile","profile","マイページ",active)+
   '</nav>';
 }
 function item(id, ico, label, active){ return '<button class="nav-item '+(id===active?'active':'')+'" data-action="tab" data-tab="'+id+'">'+icon(ico)+'<span>'+label+'</span></button>'; }
@@ -397,7 +397,7 @@ function finish(){
   return '<section class="screen no-nav"><div class="photo-hero sunset">'+top("",true)+'</div><div class="detail-sheet" style="padding-bottom:28px;text-align:center"><h1 class="h1">京都の旅を終えますか？</h1><p class="body muted" style="margin-top:7px">ここまでの記録から旅日記をつくります。</p><div class="section">'+stats()+'</div><button class="btn red" style="margin-top:26px" data-action="make-diary">旅を終了</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></section>';
 }
 function diary(){
-  return '<section class="screen">'+top("京都 2泊3日",true)+'<div class="content"><div class="diary-photo trip-photo"><div class="diary-title"><div class="caption">2026.09.21 - 09.23</div><h1 class="h2">京都で見つけた、家族の時間</h1></div></div><div class="section">'+stats()+'</div><div class="ai section"><div class="ai-tag">AIによる1日のまとめ</div><p class="body" style="margin-top:6px">京都駅から旅をスタート。鉄道博物館では子どもたちが夢中になり、錦市場では京都の味を食べ歩き。午後は清水寺から嵐山へ。竹林で新しいATTA!を見つけ、写真と一緒に旅の記憶が残りました。</p><button class="btn ghost" style="min-height:38px;margin-top:5px" data-action="rewrite">AIで書き直す</button></div><div class="timeline section">'+spots.map(s=>'<div class="tl"><div class="caption muted">'+s[0]+'</div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div>').join("")+'<div class="tl"><div class="caption muted">14:35</div><strong>竹林の小径</strong><div class="stamp-tag">✓ 竹林を歩こう</div></div></div><button class="btn primary" data-action="share">旅をシェア</button></div>'+nav("memories")+'</section>';
+  return '<section class="screen">'+top("京都 2泊3日",true)+'<div class="content"><div class="diary-photo trip-photo"><div class="diary-title"><div class="caption">2026.09.21 - 09.23</div><h1 class="h2">京都で見つけた、家族の時間</h1></div></div><div class="section">'+stats()+'</div><div class="ai section"><div class="ai-tag">AIによる1日のまとめ</div><p class="body" style="margin-top:6px">京都駅から旅をスタート。鉄道博物館では子どもたちが夢中になり、錦市場では京都の味を食べ歩き。午後は清水寺から嵐山へ。竹林で新しいATTA!を見つけ、写真と一緒に旅の記憶が残りました。</p><button class="btn ghost" style="min-height:38px;margin-top:5px" data-action="rewrite">AIで書き直す</button></div><div class="timeline section">'+spots.map(s=>'<div class="tl"><div class="caption muted">'+s[0]+'</div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div>').join("")+'<div class="tl"><div class="caption muted">14:35</div><strong>竹林の小径</strong><div class="stamp-tag">✓ 竹林を歩こう</div></div></div><button class="btn primary" data-action="share">旅をシェア</button></div>'+nav("passport")+'</section>';
 }
 function stampbook(){
   const total=Math.max(state.stamps,7);
@@ -408,7 +408,7 @@ function stampbook(){
       '<div class="collection-progress card"><div class="row between"><div><div class="caption muted">スタンプコレクション</div><div class="collection-count">'+total+' <span>/ 100</span></div></div><div class="passport-icon">▦</div></div><div class="progress"><span style="width:'+Math.min(100,total)+'%"></span></div><div class="small muted">まだ見ぬ景色を集めよう。</div></div>'+
       '<div class="pills collection-filter"><button class="chip on">すべて</button><button class="chip">日本</button><button class="chip">アジア</button><button class="chip">ヨーロッパ</button><button class="chip">その他</button></div>'+
       '<div class="stamp-grid">'+["東京","富士山","京都","宮島","奈良","札幌","沖縄","屋久島","金沢"].map((v,i)=>'<button class="stamp-tile '+(i<total?"earned":"locked")+'"><div class="stamp-medallion">'+(i<total?'ATTA!':'?')+'</div><strong>'+v+'</strong><span>'+(i<total?'2026':'まだ訪れていません')+'</span></button>').join("")+'</div>'+
-    '</div>'+nav("memories")+
+    '</div>'+nav("passport")+
   '</section>';
 }
 function share(){
@@ -433,11 +433,38 @@ function memories(){
       '<div class="ref-stats"><div><b>◉</b><strong>32<span>か国</span></strong><small>訪れた国</small></div><div><b class="donut">◔</b><strong>16%</strong><small>世界を旅した<br>(195か国中)</small></div></div>'+
       '<h3>訪れた大陸</h3><div class="ref-continents"><span>アジア<b>12か国</b></span><span>ヨーロッパ<b>11か国</b></span><span>北アメリカ<b>4か国</b></span><span>南アメリカ<b>3か国</b></span><span>アフリカ<b>2か国</b></span><span>オセアニア<b>1か国</b></span></div>'+
       '<button class="ref-collection" data-action="stampbook"><div class="passport-icon">▦</div><div><strong>ATTA! スタンプコレクション</strong><p><b>48</b> / 100</p><div class="progress"><span style="width:48%"></span></div><small>まだ見ぬ景色を集めよう。</small></div><span>›</span></button>'+
-    '</div>'+nav("memories")+
+    '</div>'+nav("passport")+
+  '</section>';
+}
+function rewardsBookings(){
+  const rewards=[
+    ["竹林の小径","PLACE STAMP","+20 JASMY","受取済み","settled"],
+    ["嵐山 人力車","BOOKING","+120 JASMY","獲得予定","pending"],
+    ["KYOTO EXPLORER","TRIP","+80 JASMY","確定","approved"],
+    ["ホテル予約取消","BOOKING","-240 JASMY","取消","reversed"]
+  ];
+  return '<section class="screen rewards-v1">'+
+    top("Rewards & Bookings",true)+
+    '<div class="content rewards-content">'+
+      '<div class="rewards-balance card"><div class="caption muted">ATTA! REWARDS</div><div class="reward-total">3,482 <span>JASMY</span></div><div class="reward-summary"><div><small>獲得予定</small><strong>420</strong></div><div><small>確定</small><strong>3,062</strong></div></div></div>'+
+      '<div class="collection-tabs rewards-tabs"><button class="on">リワード</button><button data-action="booking-tab">予約</button></div>'+
+      '<div class="reward-ledger">'+rewards.map(r=>'<button class="reward-row card" data-action="reward-detail"><div><strong>'+r[0]+'</strong><small>'+r[1]+'</small></div><div class="reward-row-right"><b>'+r[2]+'</b><span class="reward-status '+r[4]+'">'+r[3]+'</span></div></button>').join("")+'</div>'+
+      '<button class="advanced-wallet card" data-action="wallet-details"><div><strong>ウォレット・ネットワーク情報</strong><small>JasmyChainの詳細を見る</small></div><span>›</span></button>'+
+    '</div>'+nav("profile")+
   '</section>';
 }
 function profile(){
-  return '<section class="screen">'+top("",false)+'<div class="content"><h1 class="h1">マイページ</h1><div class="row section"><div class="success" style="width:72px;height:72px;margin:0;font-size:24px;border-width:3px">H</div><div><strong>Hiroshi</strong><div class="small muted">Japan</div></div></div><div class="profile-grid section"><div class="card"><strong>1</strong><div class="caption muted">Trips</div></div><div class="card"><strong>'+state.stamps+'</strong><div class="caption muted">Stamps</div></div><div class="card"><strong>8.2</strong><div class="caption muted">km</div></div></div><div class="card pad section"><h3 class="h3">プライバシー</h3><p class="small muted" style="margin-top:5px">位置情報は初期設定で非公開。共有ページにリアルタイム現在地は表示しません。</p></div><button class="btn secondary" style="margin-top:18px" data-action="reset">デモデータをリセット</button></div>'+nav("profile")+'</section>';
+  return '<section class="screen account-v1">'+
+    top("",false)+
+    '<div class="content">'+
+      '<h1 class="h1">マイページ</h1>'+
+      '<div class="account-person row"><div class="account-avatar">H</div><div><strong>Hiroshi</strong><div class="small muted">Japan</div></div></div>'+
+      '<div class="profile-grid section"><div class="card"><strong>12</strong><div class="caption muted">Trips</div></div><div class="card"><strong>'+state.stamps+'</strong><div class="caption muted">Stamps</div></div><div class="card"><strong>8</strong><div class="caption muted">Countries</div></div></div>'+
+      '<button class="account-link card" data-action="rewards-bookings"><div><div class="caption muted">ATTA! REWARDS</div><strong>3,482 JASMY</strong><small>予約・リワード履歴</small></div><span>›</span></button>'+
+      '<div class="card pad section"><h3 class="h3">プライバシー</h3><p class="small muted" style="margin-top:5px">位置情報は初期設定で非公開。共有ページにリアルタイム現在地は表示しません。</p></div>'+
+      '<button class="btn secondary" style="margin-top:18px" data-action="reset">デモデータをリセット</button>'+
+    '</div>'+nav("profile")+
+  '</section>';
 }
 
 function render(){
@@ -466,6 +493,7 @@ function render(){
     s==="story"?story():
     s==="plans"?plans():
     s==="memories"?memories():
+    s==="rewards-bookings"?rewardsBookings():
     s==="profile"?profile():homeEmpty();
   destroyLiveMap();
   app.innerHTML=html;
@@ -489,7 +517,7 @@ function bindFile(){
   });
 }
 function back(){
-  const map={create:state.tripStatus==="none"?"home-empty":"home-planned",itinerary:state.tripStatus==="none"?"home-empty":"home-planned",start:"home-planned",location:"start","live-map":"home-active","updated-map":"home-active",spot:"live-map",approaching:"live-map",arrival:"approaching",stamp:"live-map",memory:"stamp",finish:"updated-map",diary:"memories",stampbook:"memories",share:state.diaryReady?"diary":"itinerary",story:"share",plans:"home-planned",memories:"home-planned",profile:"home-planned"};
+  const map={create:state.tripStatus==="none"?"home-empty":"home-planned",itinerary:state.tripStatus==="none"?"home-empty":"home-planned",start:"home-planned",location:"start","live-map":"home-active","updated-map":"home-active",spot:"live-map",approaching:"live-map",arrival:"approaching",stamp:"live-map",memory:"stamp",finish:"updated-map",diary:"memories",stampbook:"memories",share:state.diaryReady?"diary":"itinerary",story:"share",plans:"home-planned",memories:"home-planned","rewards-bookings":"profile",profile:"home-planned"};
   go(map[state.screen] || "home-empty");
 }
 function assistant(){
@@ -543,6 +571,10 @@ document.addEventListener("click",e=>{
   else if(a==="diary" || a==="memories") go("diary",{diaryReady:true});
   else if(a==="stampbook") go("stampbook");
   else if(a==="share") go("share");
+  else if(a==="rewards-bookings") go("rewards-bookings");
+  else if(a==="reward-detail") toast("リワード詳細を開きます");
+  else if(a==="booking-tab") toast("予約履歴は次のSprintで本番接続します");
+  else if(a==="wallet-details") openSheet('<div class="row between"><h2 class="h2">ウォレット情報</h2><button class="icon-btn" data-action="close-sheet">×</button></div><div class="card pad section"><div class="label">Network</div><strong>JasmyChain</strong><div class="label" style="margin-top:14px">Wallet</div><div class="small muted">ユーザーには通常表示しない詳細情報です。</div></div>');
   else if(a==="story"){ location.hash="story"; go("story"); }
   else if(a==="copy-link"){ const url=location.origin+location.pathname+"#story"; navigator.clipboard?.writeText(url); toast("共有リンクをコピーしました"); }
   else if(a==="native-share"){ const url=location.origin+location.pathname+"#story"; if(navigator.share) navigator.share({title:"ATTA! 京都の旅",text:"京都で見つけた、家族の3日間",url}); else { navigator.clipboard?.writeText(url); toast("共有リンクをコピーしました"); } }
@@ -578,7 +610,7 @@ document.addEventListener("click",e=>{
   }
   else if(a==="close-sheet") closeSheet();
   else if(a==="reset"){ closeSheet(); localStorage.removeItem(KEY); state=Object.assign({},defaults); location.hash=""; render(); toast("デモデータをリセットしました"); }
-  else if(a==="tab"){ const t=el.dataset.tab; if(t==="home") go(state.tripStatus==="active"?"home-active":state.tripStatus==="none"?"home-empty":"home-planned"); if(t==="plan") go("plans"); if(t==="stampbook") go("stampbook"); if(t==="memories") go("memories"); if(t==="profile") go("profile"); }
+  else if(a==="tab"){ const t=el.dataset.tab; if(t==="home") go(state.tripStatus==="active"?"home-active":state.tripStatus==="none"?"home-empty":"home-planned"); if(t==="plan") go("plans"); if(t==="passport") go("memories"); if(t==="profile") go("profile"); }
   else if(a==="chip"){
     const key=el.dataset.key, v=el.dataset.value;
     if(key==="interests"){ const arr=new Set(state.interests); arr.has(v)?arr.delete(v):arr.add(v); state.interests=[...arr]; }
