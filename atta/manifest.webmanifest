@@ -1,7 +1,7 @@
 {
   "name": "ATTA!",
   "short_name": "ATTA!",
-  "description": "AIで旅をつくり、旅先で発見を集め、旅日記として残す旅行アプリ",
+  "description": "しるべと旅をつくり、旅先で発見を集め、旅日記として残す旅行アプリ",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFDF8",
@@ -10,7 +10,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/assets/atta-mark.svg",
+      "src": "/assets/atta-app-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
