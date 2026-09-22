@@ -401,7 +401,7 @@ function bindFile(){
   });
 }
 function back(){
-  const map={create:state.tripStatus==="none"?"home-empty":"home-planned",itinerary:state.tripStatus==="none"?"home-empty":"home-planned",start:"home-planned",location:"start",live-map:"home-active","updated-map":"home-active",spot:"live-map",approaching:"live-map",arrival:"approaching",stamp:"live-map",memory:"stamp",finish:"updated-map",diary:"memories",stampbook:"memories",share:state.diaryReady?"diary":"itinerary",story:"share",plans:"home-planned",memories:"home-planned",profile:"home-planned"};
+  const map={create:state.tripStatus==="none"?"home-empty":"home-planned",itinerary:state.tripStatus==="none"?"home-empty":"home-planned",start:"home-planned",location:"start","live-map":"home-active","updated-map":"home-active",spot:"live-map",approaching:"live-map",arrival:"approaching",stamp:"live-map",memory:"stamp",finish:"updated-map",diary:"memories",stampbook:"memories",share:state.diaryReady?"diary":"itinerary",story:"share",plans:"home-planned",memories:"home-planned",profile:"home-planned"};
   go(map[state.screen] || "home-empty");
 }
 function assistant(){
