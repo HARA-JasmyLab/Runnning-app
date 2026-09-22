@@ -46,7 +46,7 @@ ATTA! は以下を一つの旅行体験にまとめます。
 17. 旅を共有
 18. Travel Story
 
-詳細仕様は [docs/atta-golden-path.md](docs/atta-golden-path.md) を参照してください。
+詳細仕様は [docs/atta-golden-path.md](docs/atta-golden-path.md) を参照してください。\n\nProduction architecture:\n\n- [Product Architecture v1](docs/product-architecture-v1.md)\n- [Production Screen Map v1](docs/production-screen-map-v1.md)
 
 ## 起動
 
