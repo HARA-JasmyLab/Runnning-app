@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="t">
+<title id="t">ATTA! app icon</title>
+<rect width="128" height="128" rx="30" fill="#FFFDF8"/>
+<g transform="translate(10 10) scale(.45)">
+  <circle cx="108" cy="118" r="92" fill="none" stroke="#FF4B5C" stroke-width="7"/>
+  <circle cx="108" cy="118" r="80" fill="none" stroke="#FF4B5C" stroke-width="3" stroke-dasharray="28 7 14 6"/>
+  <path d="M51 94 82 63l17 17 18-25 46 39" fill="none" stroke="#FF4B5C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="108" y="132" text-anchor="middle" fill="#FF4B5C" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="50" font-weight="900" font-style="italic" letter-spacing="-2">ATTA!</text>
+</g>
+</svg>
