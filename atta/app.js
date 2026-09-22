@@ -1,8 +1,10 @@
 const KEY = "atta-mvp-v2";
 const defaults = {
   screen:"home-active", tripStatus:"active", stamps:7, memoryAdded:false,
-  diaryReady:false, locationGranted:false, day:1, image:null, note:"",
-  interests:["グルメ","絶景","子ども向け"], companion:"家族", pace:"バランス"
+  diaryReady:false, locationGranted:false, day:1, selectedDay:1, image:null, note:"",
+  interests:["グルメ","絶景","子ども向け"], companion:"家族", pace:"バランス",
+  builderWish:"京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。",
+  builderDestination:"京都", aiAdjustment:null, aiPlanVersion:1
 };
 let state = Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || "{}"));
 const app = document.querySelector("#app");
@@ -311,37 +313,101 @@ function plannedHome(active){
   '</section>';
 }
 function createTrip(){
-  return '<section class="screen no-nav create-v3">'+
-    '<div class="create-v3-hero"><div class="create-v3-top"><button class="icon-btn glass" data-action="back">‹</button>'+brand()+'<button class="icon-btn glass" data-action="menu">☰</button></div><div class="create-v3-copy"><div class="eyebrow">PLAN WITH ATTA! AI</div><h1 class="display">AIとつくる、<br>あなただけの旅プラン。</h1></div></div>'+
-    '<div class="content create-v3-sheet">'+
-      '<div class="field first"><label class="label">どんな旅にしたい？</label><textarea class="textarea large" id="wish">京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。</textarea></div>'+
-      '<div class="two-col"><div class="field"><label class="label">行き先</label><input class="input" id="destination" value="京都"></div><div class="field"><label class="label">旅行期間</label><div class="input fake-input">9/21 → 9/23</div></div></div>'+
-      '<div class="field"><label class="label">誰と？</label>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
-      '<div class="field"><label class="label">興味</label>'+chips(["グルメ","絶景","子ども向け","歴史・文化","カフェ","ローカル"],state.interests,"interests")+'</div>'+
-      '<div class="field"><label class="label">旅のペース</label>'+chips(["ゆったり","バランス","アクティブ"],[state.pace],"pace")+'</div>'+
-      '<button class="btn red" style="margin-top:24px" data-action="generate">AIで旅をつくる <span>→</span></button>'+
-    '</div></section>';
+  const wish=state.builderWish || "京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。";
+  const destination=state.builderDestination || "京都";
+  return '<section class="screen no-nav planner-v4">'+
+    '<div class="planner-v4-hero">'+
+      '<div class="planner-v4-head"><button class="icon-btn glass" data-action="back">‹</button>'+brand("white")+'<button class="icon-btn glass" data-action="menu">☰</button></div>'+
+      '<div class="planner-v4-overlay"></div>'+
+      '<div class="planner-v4-copy"><div class="eyebrow">PLAN WITH ATTA! AI</div><h1>AIとつくる、<br>あなただけの旅プラン。</h1><p>行きたい場所と気分を、ひとことで。</p></div>'+
+    '</div>'+
+    '<div class="planner-v4-sheet">'+
+      '<div class="planner-v4-prompt"><div class="row between"><label>どんな旅にしたい？</label><span class="ai-mini">✦ AI</span></div><textarea id="wish" class="planner-prompt-input">'+wish+'</textarea><div class="prompt-actions"><button type="button" data-action="voice-demo">◉ 音声で話す</button><span>文章から条件を自動で読み取ります</span></div></div>'+
+      '<div class="planner-grid">'+
+        '<div class="planner-field"><span>行き先</span><input id="destination" value="'+destination+'"></div>'+
+        '<button class="planner-field planner-field-button" data-action="date-info"><span>旅行期間</span><strong>9/21 → 9/23</strong><small>2泊3日</small></button>'+
+      '</div>'+
+      '<div class="planner-section"><div class="planner-label">AIが読み取った条件</div><div class="planner-derived"><span>👨‍👩‍👧‍👦 家族4人</span><span>🍜 グルメ</span><span>⛩ 歴史・文化</span><span>🚶 歩きすぎない</span></div></div>'+
+      '<div class="planner-section"><div class="planner-label">誰と？</div>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
+      '<div class="planner-section"><div class="planner-label">興味</div>'+chips(["グルメ","絶景","子ども向け","歴史・文化","カフェ","ローカル"],state.interests,"interests")+'</div>'+
+      '<div class="planner-section"><div class="planner-label">旅のペース</div>'+chips(["ゆったり","バランス","アクティブ"],[state.pace],"pace")+'</div>'+
+      '<div class="planner-section planner-budget"><div><div class="planner-label">予算</div><strong>指定なし</strong></div><button data-action="budget-info">設定 ›</button></div>'+
+      '<button class="planner-generate" data-action="generate"><span>✦</span><div><strong>AIで旅をつくる</strong><small>移動時間・営業時間も考慮</small></div><b>→</b></button>'+
+      '<p class="planner-footnote">あとから何度でも変更できます</p>'+
+    '</div>'+
+  '</section>';
 }
 function generating(){
-  return '<section class="screen no-nav"><div class="content" style="padding-top:80px;text-align:center">'+brand()+'<div class="loader"></div><h1 class="h2">あなたの旅を考えています。</h1>'+
-    '<div class="steps" style="text-align:left"><div class="step done"><span class="mark">✓</span>好みを分析</div><div class="step done"><span class="mark">✓</span>移動しやすい順番を計算</div><div class="step done"><span class="mark">✓</span>おすすめスポットを選択</div><div class="step active"><span class="mark">●</span>ATTA!スポットを追加</div><div class="step"><span class="mark">○</span>旅のしおりを仕上げています</div></div>'+
-    '<p class="small muted">旅行前の手間をAIで減らし、現地では旅そのものを楽しめるようにします。</p></div></section>';
+  return '<section class="screen no-nav generating-v4">'+
+    '<div class="generating-photo trip-photo"><div class="generating-shade"></div><div class="generating-brand">'+brand("white")+'</div><div class="generating-copy"><div class="eyebrow">BUILDING YOUR KYOTO TRIP</div><h1>旅の流れを<br>組み立てています。</h1></div></div>'+
+    '<div class="generating-sheet">'+
+      '<div class="generation-orbit"><span></span><b>AI</b></div>'+
+      '<div class="generation-steps">'+
+        '<div class="done"><i>✓</i><span><strong>希望を読み取りました</strong><small>家族4人・グルメ・寺・歩きすぎない</small></span></div>'+
+        '<div class="done"><i>✓</i><span><strong>候補スポットを確認</strong><small>営業時間と位置関係を整理</small></span></div>'+
+        '<div class="active"><i></i><span><strong>移動しやすい順番を計算</strong><small>徒歩と電車の負担を調整中</small></span></div>'+
+        '<div><i></i><span><strong>予約できる体験を追加</strong><small>旅程に自然に入るものだけ</small></span></div>'+
+        '<div><i></i><span><strong>しおりを仕上げる</strong><small>ATTA!スポットも確認</small></span></div>'+
+      '</div>'+
+      '<p class="generation-note">「行きたい場所」より先に、<br>無理のない旅の流れをつくります。</p>'+
+    '</div>'+
+  '</section>';
 }
-const spots=[
-  ["09:00","京都駅","旅のスタート","https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=160&q=80"],
-  ["10:00","京都鉄道博物館","子どもも楽しめる体験型スポット","https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=160&q=80"],
-  ["12:30","錦市場","京都の食を食べ歩き","https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=160&q=80"],
-  ["15:00","清水寺","定番の絶景スポット","https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=160&q=80"]
+
+const tripDays = [
+  [
+    {time:"09:00",name:"京都駅",desc:"旅のスタート",area:"下京区",img:"https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=520&q=86",travel:"徒歩 18分",stamp:false},
+    {time:"10:00",name:"京都鉄道博物館",desc:"子どもも楽しめる体験型スポット",area:"梅小路",img:"https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=520&q=86",travel:"タクシー 12分",stamp:true},
+    {time:"12:30",name:"錦市場",desc:"京都の食を少しずつ食べ歩き",area:"中京区",img:"https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=520&q=86",travel:"徒歩 22分",stamp:true},
+    {time:"15:00",name:"清水寺",desc:"夕方の光がきれいな定番の絶景",area:"東山区",img:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=520&q=86",travel:null,stamp:true,spot:true}
+  ],
+  [
+    {time:"08:30",name:"嵐山・渡月橋",desc:"混雑前の朝に川沿いを散歩",area:"嵐山",img:"https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=520&q=86",travel:"徒歩 11分",stamp:true},
+    {time:"09:15",name:"竹林の小径",desc:"竹の音と木漏れ日を楽しむ",area:"嵐山",img:"https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=520&q=86",travel:"徒歩 8分",stamp:true,spot:true},
+    {time:"10:30",name:"天龍寺",desc:"庭園をゆっくり散策",area:"嵐山",img:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=520&q=86",travel:"徒歩 6分",stamp:true},
+    {time:"12:00",name:"嵐山 人力車",desc:"家族で楽しめる40分コース",area:"嵐山",img:"https://images.unsplash.com/photo-1526481280695-3c687fd643ed?auto=format&fit=crop&w=520&q=86",travel:"徒歩 9分",booking:{title:"嵐山 人力車 40分",price:"¥8,000",reward:"+120 JASMY予定"}},
+    {time:"13:30",name:"嵐山ランチ",desc:"歩く距離を増やさない近場の昼食",area:"嵐山",img:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=520&q=86",travel:null,stamp:false}
+  ],
+  [
+    {time:"09:00",name:"伏見稲荷大社",desc:"朝の千本鳥居を歩く",area:"伏見",img:"https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?auto=format&fit=crop&w=520&q=86",travel:"電車 28分",stamp:true},
+    {time:"11:30",name:"宇治・平等院",desc:"宇治川と世界遺産をゆっくり",area:"宇治",img:"https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=520&q=86",travel:"徒歩 9分",stamp:true},
+    {time:"13:00",name:"宇治抹茶ランチ",desc:"最後は抹茶と軽めの昼食",area:"宇治",img:"https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=520&q=86",travel:"電車 35分",stamp:false},
+    {time:"15:30",name:"京都駅",desc:"旅の終わり。おみやげ時間も確保",area:"京都駅",img:"https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=520&q=86",travel:null,stamp:false}
+  ]
 ];
+
+function renderTripItem(item,index){
+  const action=item.spot?'spot':'noop';
+  return '<div class="itinerary-item-v4" data-action="'+action+'">'+
+    '<div class="itinerary-time">'+item.time+'</div>'+
+    '<div class="itinerary-card-v4">'+
+      '<div class="itinerary-photo-v4" style="background-image:url('+item.img+')">'+(item.stamp?'<span class="itinerary-stamp">ATTA!</span>':'')+'</div>'+
+      '<div class="itinerary-body-v4"><div class="row between"><div><strong>'+item.name+'</strong><small>'+item.area+'</small></div><button class="item-more" data-action="trip-item-menu">•••</button></div><p>'+item.desc+'</p>'+
+      (item.booking?'<button class="inline-booking" data-action="booking-offer"><span><small>予約できる体験</small><strong>'+item.booking.title+'</strong></span><span class="booking-price">'+item.booking.price+'<small>'+item.booking.reward+'</small></span><b>›</b></button>':'')+
+      '</div>'+
+    '</div>'+
+    (item.travel?'<div class="route-leg-v4"><span></span><i>↓</i><b>'+item.travel+'</b></div>':'')+
+  '</div>';
+}
 function itinerary(){
-  return '<section class="screen no-nav">'+top("旅のしおり",true)+'<div class="content">'+
-    '<div class="hero trip-photo"><div class="hand-note">3 days in Kyoto</div><div class="postmark">KYOTO<br>21 SEP</div><svg class="route-doodle" viewBox="0 0 370 282" preserveAspectRatio="none"><path d="M40 220 C90 190,112 207,143 174 S210 116,254 147 S306 116,334 65"/><circle cx="40" cy="220" r="5"/><circle cx="334" cy="65" r="5"/></svg><div class="hero-copy"><div class="caption">2026.09.21 - 09.23 · 家族4人</div><h1 class="h2" style="margin-top:6px">京都で見つける、家族の3日間</h1></div></div>'+
-    '<div class="ai section"><div class="ai-tag">ATTA! AI</div><p class="small" style="margin-top:5px">子どもが飽きにくく、移動を詰め込みすぎない3日間にしました。スタンプ10個を自然に集められます。</p></div>'+
-    '<div class="section pills"><button class="chip on">DAY 1</button><button class="chip">DAY 2</button><button class="chip">DAY 3</button></div>'+
-    '<div class="timeline section">'+spots.map((s,i)=>'<div class="tl" data-action="'+(i===3?'spot':'noop')+'"><div class="caption muted">'+s[0]+'</div><div class="spot-row"><div class="thumb" style="background-image:url('+s[3]+')"></div><div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div><div class="stamp-tag">'+(i>0?'STAMP':'')+'</div></div></div>').join("")+'</div>'+
-    '<div class="section"><div class="label">AIで調整</div>'+chips(["もっとゆっくり","グルメを増やす","子ども向け","雨の日"],[],"quick")+'</div>'+
-    '<button class="btn primary" style="margin-top:22px" data-action="confirm-trip">この旅に決定</button><button class="btn secondary" style="margin-top:8px" data-action="new-trip">編集する</button>'+
-    '</div></section>';
+  const day=Math.max(1,Math.min(3,state.selectedDay||1));
+  const items=tripDays[day-1];
+  const summary=day===1?"徒歩 3.8km · 移動 52分":day===2?"徒歩 2.4km · 移動 34分":"徒歩 2.1km · 移動 63分";
+  return '<section class="screen no-nav itinerary-v4">'+
+    '<div class="itinerary-v4-hero trip-photo">'+
+      '<div class="itinerary-v4-head"><button class="icon-btn glass" data-action="back">‹</button>'+brand("white")+'<div class="row"><button class="icon-btn glass" data-action="trip-map">⌖</button><button class="icon-btn glass" data-action="share">↗</button></div></div>'+
+      '<div class="itinerary-v4-shade"></div>'+
+      '<div class="itinerary-v4-copy"><small>2026.09.21 - 09.23 · 家族4人</small><h1>京都で見つける、<br>家族の3日間</h1><div class="trip-summary-pills"><span>10 ATTA!</span><span>歩きすぎない</span></div></div>'+
+    '</div>'+
+    '<div class="itinerary-v4-sheet">'+
+      '<div class="ai-plan-note"><div class="ai-orb">✦</div><div><strong>ATTA! AI</strong><p>子どもが飽きにくく、移動を詰め込みすぎない流れにしました。</p></div></div>'+
+      '<div class="day-tabs-v4">'+[1,2,3].map(d=>'<button class="'+(d===day?'on':'')+'" data-action="select-day" data-day="'+d+'"><small>DAY '+d+'</small><strong>9/'+(20+d)+'</strong></button>').join("")+'</div>'+
+      '<div class="day-overview-v4"><div><small>DAY '+day+'</small><strong>'+(day===1?'京都市内':day===2?'嵐山':'伏見・宇治')+'</strong></div><div><small>今日の負担</small><strong>'+summary+'</strong></div></div>'+
+      '<div class="itinerary-list-v4">'+items.map(renderTripItem).join("")+'</div>'+
+      '<div class="ai-adjust-v4"><div class="row between"><div><small>AIで調整</small><strong>この日の流れを変える</strong></div><span>✦</span></div><div class="ai-adjust-chips">'+["もっとゆっくり","雨の日","子ども向け","グルメを増やす"].map(v=>'<button data-action="quick-adjust" data-value="'+v+'">'+v+'</button>').join("")+'</div></div>'+
+      '<div class="itinerary-actions-v4"><button class="btn secondary" data-action="edit-day">編集する</button><button class="btn primary" data-action="confirm-trip">この旅に決定</button></div>'+
+    '</div>'+
+  '</section>';
 }
 function confirmed(){
   return '<section class="screen no-nav"><div class="content" style="padding-top:72px;text-align:center">'+brand()+'<div class="success">✓</div><h1 class="h1">旅の準備ができました。</h1><p class="body muted" style="margin-top:10px">京都 2泊3日<br>2026.09.21 - 09.23</p><button class="btn primary" style="margin-top:34px" data-action="planned-home">ホームへ</button><button class="btn ghost" style="margin-top:8px" data-action="share">しおりを共有</button></div></section>';
@@ -528,7 +594,31 @@ document.addEventListener("click",e=>{
   const a=el.dataset.action;
   if(a==="back") back();
   else if(a==="new-trip") go("create");
-  else if(a==="generate"){ go("generating"); setTimeout(()=>go("itinerary"),1500); }
+  else if(a==="generate"){
+    const wish=document.querySelector("#wish");
+    const dest=document.querySelector("#destination");
+    state.builderWish=(wish?.value||state.builderWish||"").trim();
+    state.builderDestination=(dest?.value||state.builderDestination||"京都").trim()||"京都";
+    state.selectedDay=1; state.aiAdjustment=null; save();
+    go("generating");
+    setTimeout(()=>go("itinerary"),1800);
+  }
+  else if(a==="select-day"){ state.selectedDay=Number(el.dataset.day)||1; save(); render(); }
+  else if(a==="quick-adjust"){
+    const v=el.dataset.value||"";
+    const detail=v==="もっとゆっくり"?"徒歩 -1.8km · 自由時間 +45分":v==="雨の日"?"屋内スポット 2件に変更 · 徒歩 -0.9km":v==="子ども向け"?"体験スポット +1 · 待ち時間 -20分":"食事・カフェ +1 · 移動 +8分";
+    openSheet('<div class="row between"><div><div class="caption muted">ATTA! AI</div><h2 class="h2">'+v+'</h2></div><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:8px">旅程全体ではなく、この日の流れだけを調整します。</p><div class="ai-change-preview card pad section"><small>変更すると</small><strong>'+detail+'</strong><div class="small muted" style="margin-top:6px">予約済みの予定は動かしません。</div></div><button class="btn primary" data-action="apply-adjust" data-value="'+v+'">この予定に変更</button>');
+  }
+  else if(a==="apply-adjust"){ state.aiAdjustment=el.dataset.value||""; state.aiPlanVersion=(state.aiPlanVersion||1)+1; save(); closeSheet(); toast("旅程を更新しました"); render(); }
+  else if(a==="edit-day") openSheet('<div class="row between"><h2 class="h2">DAY '+(state.selectedDay||1)+' を編集</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:8px">順番・時間・スポット変更は次の編集画面でまとめて操作します。</p><div class="stack section"><button class="btn secondary" data-action="edit-placeholder">順番を並べ替える</button><button class="btn secondary" data-action="edit-placeholder">スポットを追加</button><button class="btn secondary" data-action="edit-placeholder">時間を変更</button></div>');
+  else if(a==="edit-placeholder"){ closeSheet(); toast("Day Editorへ接続する準備ができています"); }
+  else if(a==="trip-map"){ toast("Trip Mapは次の画面実装で接続します"); }
+  else if(a==="trip-item-menu"){ e.stopPropagation(); openSheet('<div class="row between"><h2 class="h2">予定を編集</h2><button class="icon-btn" data-action="close-sheet">×</button></div><div class="stack section"><button class="btn secondary" data-action="edit-placeholder">時間を変更</button><button class="btn secondary" data-action="edit-placeholder">別の場所に変更</button><button class="btn ghost" data-action="edit-placeholder">この予定をスキップ</button></div>'); }
+  else if(a==="booking-offer"){ e.stopPropagation(); openSheet('<div class="row between"><div><div class="caption muted">BOOKABLE EXPERIENCE</div><h2 class="h2">嵐山 人力車 40分</h2></div><button class="icon-btn" data-action="close-sheet">×</button></div><div class="booking-preview-photo section"></div><div class="row between"><div><div class="small muted">2名〜</div><strong class="h3">¥8,000</strong></div><div class="booking-reward-mini"><small>予約すると</small><strong>+120 JASMY予定</strong></div></div><p class="small muted" style="margin-top:12px">予約成立後は旅程に自動で追加。JASMYは利用確認後に確定します。</p><button class="btn primary" style="margin-top:18px" data-action="booking-demo">予約を見る</button>'); }
+  else if(a==="booking-demo"){ closeSheet(); toast("Booking Offers画面へ接続する準備ができています"); }
+  else if(a==="voice-demo") toast("音声入力はネイティブ実装時に接続します");
+  else if(a==="date-info") toast("2026/09/21 - 09/23");
+  else if(a==="budget-info") toast("予算条件は任意です");
   else if(a==="confirm-trip") go("confirmed",{tripStatus:"planned"});
   else if(a==="planned-home") go("home-planned");
   else if(a==="itinerary") go("itinerary");
@@ -616,7 +706,7 @@ document.addEventListener("click",e=>{
     if(key==="interests"){ const arr=new Set(state.interests); arr.has(v)?arr.delete(v):arr.add(v); state.interests=[...arr]; }
     if(key==="companion") state.companion=v;
     if(key==="pace") state.pace=v;
-    if(key==="quick") toast(v+" の条件で旅程を再提案しました");
+    if(key==="quick") toast(v+" の条件を保存しました");
     save(); render();
   }
   else if(a==="noop") toast("このスポットの詳細はMVPでは省略しています");
