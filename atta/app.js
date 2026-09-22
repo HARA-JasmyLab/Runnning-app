@@ -464,7 +464,7 @@ function liveMap(updated){
       '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
     '</div>'+
     '<div class="map-status"><span class="map-status-live">'+(MAPBOX_TOKEN?'MAPBOX LIVE':'LIVE MAP · OSM')+'</span><span class="map-status-fallback">MAP LOADING</span></div>'+
-    '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button><button data-action="assistant" aria-label="しるべ">✨</button></div>'+
+    '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button></div><button class="silva-dot" data-action="assistant" aria-label="しるべに相談"><span class="silva-dot-face"><img src="/assets/silva.svg" alt=""></span><span>しるべ</span></button>'+
     '<div class="map-sheet"><div class="caption" style="font-weight:900;color:var(--red)">NEXT</div><div class="row between" style="margin-top:5px"><div><div class="h3">'+nextName+'</div><div class="small muted">京都・嵐山 · <span data-role="proximity">現在地</span></div></div><div style="text-align:right"><strong data-role="route-time">徒歩ルート</strong><div class="small muted" data-role="route-meta">計算中...</div></div></div>'+
     '<button class="btn primary" style="margin-top:12px" data-action="open-navigation">ナビを開始</button>'+
     (!updated?'<button class="btn secondary" style="margin-top:8px" data-action="spot">スポットを見る</button><button class="btn ghost" data-action="simulate-arrival">デモ：到着をシミュレート</button>':'<button class="btn ghost" data-action="finish-trip">旅を終了</button>')+
@@ -652,7 +652,7 @@ function back(){
   go(map[state.screen] || "home-empty");
 }
 function assistant(){
-  openSheet('<div class="row between"><h2 class="h2">しるべ</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:5px">どうした？</p><div class="stack section"><button class="btn secondary" data-action="assistant-fatigue">ちょっと疲れた</button><button class="btn secondary" data-action="assistant-rain">雨が降ってきた</button><button class="btn secondary" data-action="assistant-hungry">お腹が空いた</button><button class="btn secondary" data-action="assistant-free">時間が余った</button></div>');
+  openSheet('<div class="silva-sheet-head"><img src="/assets/silva.svg" alt="しるべ"><div><div class="caption muted">Silva · 旅の案内役</div><h2 class="h2">どうした？</h2><p class="small muted">今の旅程を見ながら、次の動きを一緒に考えるよ。</p></div><button class="icon-btn" data-action="close-sheet">×</button></div><div class="silva-suggestion-grid section"><button data-action="assistant-fatigue"><span>😮‍💨</span><strong>ちょっと疲れた</strong><small>歩く距離を減らす</small></button><button data-action="assistant-rain"><span>☔</span><strong>雨が降ってきた</strong><small>屋内中心に変える</small></button><button data-action="assistant-hungry"><span>🍜</span><strong>お腹が空いた</strong><small>近くの食事を探す</small></button><button data-action="assistant-free"><span>⏱</span><strong>時間が余った</strong><small>寄り道をひとつ追加</small></button></div>');
 }
 document.addEventListener("click",e=>{
   const el=e.target.closest("[data-action]"); if(!el) return;
