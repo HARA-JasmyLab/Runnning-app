@@ -1457,3 +1457,141 @@ button{-webkit-tap-highlight-color:transparent}
   height:50px;
   object-fit:contain;
 }
+
+
+/* === SILVA REAL CONVERSATION / TRIP BUILDER === */
+.silva-chat-card{
+  margin-top:0;
+  border:1px solid #e3eaee;
+  background:rgba(255,255,255,.98);
+  border-radius:24px;
+  padding:13px;
+  box-shadow:0 14px 34px rgba(11,45,74,.08);
+}
+.silva-chat-head{
+  display:grid;
+  grid-template-columns:48px 1fr 10px;
+  gap:9px;
+  align-items:center;
+  padding-bottom:10px;
+  border-bottom:1px solid #eef2f4;
+}
+.silva-chat-avatar{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  overflow:hidden;
+  background:#fff7ed;
+  display:grid;
+  place-items:center;
+}
+.silva-chat-avatar img{width:54px;height:54px;object-fit:contain}
+.silva-chat-head strong,
+.silva-chat-head span{display:block}
+.silva-chat-head strong{font-size:13px}
+.silva-chat-head span{font-size:8px;color:#768690;margin-top:2px}
+.silva-live-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#39a66d;
+  box-shadow:0 0 0 4px #e8f6ee;
+}
+.silva-chat-log{
+  max-height:250px;
+  overflow:auto;
+  display:grid;
+  gap:9px;
+  padding:12px 1px 5px;
+  scroll-behavior:smooth;
+}
+.silva-chat-row{display:flex;align-items:flex-end;gap:7px}
+.silva-chat-row.user{justify-content:flex-end}
+.silva-chat-row>img{
+  width:31px;height:31px;object-fit:contain;border-radius:50%;background:#fff7ed;flex:0 0 31px;
+}
+.silva-chat-bubble{
+  max-width:82%;
+  padding:10px 11px;
+  border-radius:16px 16px 16px 5px;
+  background:#f2f6f7;
+  color:#173c50;
+  font-size:11px;
+  line-height:1.55;
+}
+.silva-chat-row.user .silva-chat-bubble{
+  background:var(--atta-brand-navy);
+  color:#fff;
+  border-radius:16px 16px 5px 16px;
+}
+.silva-chat-bubble.typing{display:flex;gap:4px;padding:13px 14px}
+.silva-chat-bubble.typing i{
+  width:5px;height:5px;border-radius:50%;background:#8b9aa3;
+  animation:silvaTyping 1s infinite ease-in-out;
+}
+.silva-chat-bubble.typing i:nth-child(2){animation-delay:.14s}
+.silva-chat-bubble.typing i:nth-child(3){animation-delay:.28s}
+@keyframes silvaTyping{
+  0%,60%,100%{transform:translateY(0);opacity:.5}
+  30%{transform:translateY(-4px);opacity:1}
+}
+.silva-chat-suggestions{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:7px 0 2px;
+  scrollbar-width:none;
+}
+.silva-chat-suggestions::-webkit-scrollbar{display:none}
+.silva-chat-suggestions button{
+  border:1px solid #dfe7ea;
+  background:#fffaf3;
+  color:var(--atta-brand-navy);
+  white-space:nowrap;
+  border-radius:999px;
+  padding:8px 10px;
+  font-size:9px;
+  font-weight:800;
+}
+.silva-chat-error{
+  margin-top:7px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:#fff1f3;
+  color:#a24257;
+  font-size:9px;
+}
+.silva-chat-compose{
+  display:grid;
+  grid-template-columns:1fr 44px;
+  gap:7px;
+  align-items:center;
+  margin-top:9px;
+  border:1px solid #dce5e9;
+  border-radius:17px;
+  padding:5px 5px 5px 11px;
+  background:#fff;
+}
+.silva-chat-compose input{
+  width:100%;
+  border:0;
+  outline:0;
+  font:inherit;
+  color:var(--atta-brand-navy);
+  background:transparent;
+  font-size:11px;
+}
+.silva-chat-compose input::placeholder{color:#9aa6ad}
+.silva-chat-compose button{
+  width:40px;height:40px;border:0;border-radius:13px;
+  background:var(--atta-brand-red);color:#fff;font-size:19px;font-weight:900;
+}
+.silva-chat-compose button:disabled{opacity:.42}
+.silva-summary-card{margin-top:13px!important;box-shadow:none!important;background:#fbfcfd!important}
+.planner-derived .pending{
+  color:#87959d;
+  background:#f2f4f5;
+  border:1px dashed #ccd6db;
+}
+.planner-generate.ready{
+  background:linear-gradient(135deg,#0a334d,#0a4965);
+  box-shadow:0 14px 32px rgba(6,47,73,.28);
+}
