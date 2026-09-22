@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 112" role="img" aria-labelledby="t">
+<title id="t">ATTA! white horizontal logo</title>
+<g transform="translate(4 5) scale(.33)">
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="154" cy="145" r="112" stroke-width="7"/><circle cx="154" cy="145" r="99" stroke-width="3" stroke-dasharray="42 8 18 7"/>
+    <path d="M257 160c28-8 48-8 77 0M257 180c28-8 48-8 77 0M257 200c28-8 48-8 77 0" stroke-width="6"/>
+    <path d="M91 207l34-34 23 23 19-18 40 29H91z" stroke-width="6"/>
+  </g>
+  <path fill="#FFFFFF" d="M139 88l30-21 8 4-11 13 24 4-3 7-28-2-12 12-5-2 6-13-9-2z"/>
+</g>
+<text x="135" y="66" fill="#FFFFFF" font-family="Marker Felt, Bradley Hand, Arial Rounded MT Bold, sans-serif" font-size="58" font-weight="900" font-style="italic">ATTA!</text>
+<text x="138" y="91" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="4">TRAVEL · EXPLORE · COLLECT</text>
+</svg>
