@@ -257,7 +257,14 @@ function initShowcaseMap(type,attempt=0){
   }catch(err){ console.warn("ATTA showcase map fallback",err); }
 }
 function brand(tone="navy"){
-  return '<div class="brand brand-lockup brand-'+tone+'" aria-label="ATTA!"><span class="brand-word">ATTA</span><span class="brand-mark"><span class="brand-bang">!</span><span class="brand-pin"></span></span></div>';
+  const src=tone==="white"?"/assets/atta-logo-horizontal-white.svg":"/assets/atta-logo-horizontal.svg";
+  return '<div class="brand brand-lockup brand-'+tone+'" aria-label="ATTA!"><img src="'+src+'" alt="ATTA!"></div>';
+}
+function brandStamp(className=""){
+  return '<img class="brand-stamp '+className+'" src="/assets/atta-logo-stamp.svg" alt="ATTA! passport stamp">';
+}
+function brandMark(className=""){
+  return '<img class="brand-mark-img '+className+'" src="/assets/atta-mark.svg" alt="" aria-hidden="true">';
 }
 function top(title, back){ return '<div class="topbar">'+(back===false?brand():'<button class="back" data-action="back">‹</button>')+(title?'<strong>'+title+'</strong>':'')+'<button class="icon-btn" data-action="menu">•••</button></div>'; }
 function icon(name){
@@ -307,7 +314,7 @@ function plannedHome(active){
       '<div class="current-dot"></div><button class="ref-locate" data-action="live-map">➤</button>'+
     '</div>'+
     '<div class="ref-home-sheet">'+
-      '<button class="ref-stamp-card" data-action="stampbook"><div class="ref-stamp-image"></div><div class="ref-stamp-copy"><small>新しいスタンプを獲得！</small><strong>宮島・厳島神社</strong><span>2026.09.21</span></div><div class="ref-stamp-seal">ATTA!<br>STAMP</div><b>›</b></button>'+
+      '<button class="ref-stamp-card" data-action="stampbook"><div class="ref-stamp-image"></div><div class="ref-stamp-copy"><small>新しいスタンプを獲得！</small><strong>宮島・厳島神社</strong><span>2026.09.21</span></div><div class="ref-stamp-seal">'+brandStamp("stamp-mini")+'</div><b>›</b></button>'+
       '<div class="ref-move-card"><h3>移動の記録</h3><div class="movement-grid ref-movement"><div><b>♟</b><span>徒歩</span><strong>12 km</strong></div><div><b>▣</b><span>電車</span><strong>420 km</strong></div><div><b>◆</b><span>車</span><strong>310 km</strong></div><div><b>✈</b><span>飛行機</span><strong>480 km</strong></div></div></div>'+
     '</div>'+nav("home")+
   '</section>';
@@ -446,7 +453,7 @@ function spot(){
         '<div class="row between nearby-title"><h3>この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
         '<div class="nearby-grid ref-nearby"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
         '<div class="spot-section-title"><div><small>ATTA! STAMP</small><h3>竹林を歩こう</h3></div><span>未獲得</span></div>'+
-        '<button class="spot-stamp-card" data-action="live-map"><div class="spot-stamp-seal">ATTA!</div><div><strong>現地に到着すると自動でGET</strong><p>GPSで到着を確認します。手動取得はありません。</p></div><b>›</b></button>'+
+        '<button class="spot-stamp-card" data-action="live-map"><div class="spot-stamp-seal">'+brandStamp("stamp-mini")+'</div><div><strong>現地に到着すると自動でGET</strong><p>GPSで到着を確認します。手動取得はありません。</p></div><b>›</b></button>'+
         '<div class="spot-section-title booking-title"><div><small>BOOKABLE EXPERIENCES</small><h3>この場所でできる体験</h3></div></div>'+
         '<button class="spot-booking-card" data-action="booking-offer">'+
           '<div class="spot-booking-photo"></div>'+
@@ -462,10 +469,20 @@ function approaching(){
   return '<section class="screen no-nav">'+top("竹林の小径",true)+'<div class="content" style="padding-top:58px;text-align:center"><div class="loader"></div><h1 class="h1">もうすぐATTA!</h1><p class="body muted" style="margin-top:9px">スポットまであと50m。到着を確認しています。</p><div class="card pad section"><strong>GPS判定</strong><p class="small muted" style="margin-top:4px">MVP基準：半径150m・精度50m以内を目安に判定</p></div><button class="btn red" style="margin-top:30px" data-action="arrival">到着した</button></div></section>';
 }
 function arrival(){
-  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center"><div class="loader"></div><div class="brand">ATTA<i>!</i></div><h1 class="h2" style="margin-top:18px">竹林の小径に到着しました。</h1><p class="small muted" style="margin-top:7px">位置情報を確認しています…</p></div></div></section>';
+  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center"><div class="loader"></div>'+brand("navy")+'<h1 class="h2" style="margin-top:18px">竹林の小径に到着しました。</h1><p class="small muted" style="margin-top:7px">位置情報を確認しています…</p></div></div></section>';
 }
 function stamp(){
-  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center"><div class="passport-kicker">✦ DISCOVERED IN KYOTO</div>'+brand()+'<h1 class="h2" style="margin-top:12px">新しい発見が、あなたの旅を特別にする。</h1><div class="big-stamp">竹林を<br>歩こう<br><span style="font-size:12px">ARASHIYAMA</span></div><div class="h3">京都・嵐山</div><p class="small muted" style="margin-top:5px">'+state.stamps+' / 10 STAMPS</p><div class="handwritten" style="margin-top:12px">one more memory collected.</div><button class="btn red" style="margin-top:22px" data-action="memory">📷 写真を残す</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></div></section>';
+  return '<section class="screen fullscreen"><div class="full-photo bamboo"><div class="center stamp-success-v2">'+
+    '<div class="passport-kicker">DISCOVERED IN KYOTO</div>'+
+    brandStamp("stamp-hero")+
+    '<h1 class="h2">竹林を歩こう</h1>'+
+    '<div class="h3" style="margin-top:5px">京都・嵐山</div>'+
+    '<p class="small muted" style="margin-top:5px">'+state.stamps+' / 10 STAMPS</p>'+
+    '<div class="stamp-reward-line">+20 JASMY <span>獲得</span></div>'+
+    '<div class="handwritten" style="margin-top:10px">one more memory collected.</div>'+
+    '<button class="btn red" style="margin-top:20px" data-action="memory">📷 写真を残す</button>'+
+    '<button class="btn ghost" data-action="updated-map">旅を続ける</button>'+
+  '</div></div></section>';
 }
 function memory(){
   return '<section class="screen no-nav">'+top("思い出を追加",true)+'<div class="content"><h1 class="h1">この瞬間を残そう</h1><p class="body muted" style="margin-top:6px">長文は不要。写真とひとことだけで十分です。</p><label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none"><div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div><button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✨ AIでひとことを作る</button><button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button></div></section>';
@@ -482,7 +499,7 @@ function stampbook(){
     '<div class="collection-header">'+brand()+'<button class="icon-btn" data-action="share">↗</button></div>'+
     '<div class="content">'+
       '<div class="collection-tabs"><button class="on">スタンプ帳</button><button data-action="memories">思い出</button></div>'+
-      '<div class="collection-progress card"><div class="row between"><div><div class="caption muted">スタンプコレクション</div><div class="collection-count">'+total+' <span>/ 100</span></div></div><div class="passport-icon">▦</div></div><div class="progress"><span style="width:'+Math.min(100,total)+'%"></span></div><div class="small muted">まだ見ぬ景色を集めよう。</div></div>'+
+      '<div class="collection-progress card"><div class="row between"><div><div class="caption muted">スタンプコレクション</div><div class="collection-count">'+total+' <span>/ 100</span></div></div><div class="passport-icon">'+brandMark("passport-mark")+'</div></div><div class="progress"><span style="width:'+Math.min(100,total)+'%"></span></div><div class="small muted">まだ見ぬ景色を集めよう。</div></div>'+
       '<div class="pills collection-filter"><button class="chip on">すべて</button><button class="chip">日本</button><button class="chip">アジア</button><button class="chip">ヨーロッパ</button><button class="chip">その他</button></div>'+
       '<div class="stamp-grid">'+["東京","富士山","京都","宮島","奈良","札幌","沖縄","屋久島","金沢"].map((v,i)=>'<button class="stamp-tile '+(i<total?"earned":"locked")+'"><div class="stamp-medallion">'+(i<total?'ATTA!':'?')+'</div><strong>'+v+'</strong><span>'+(i<total?'2026':'まだ訪れていません')+'</span></button>').join("")+'</div>'+
     '</div>'+nav("passport")+
