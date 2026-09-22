@@ -269,10 +269,12 @@ function icon(name){
   return icons[name]||'';
 }
 function nav(active){
+  const fourthId=active==="home"?"stampbook":"memories";
+  const fourthLabel=active==="home"?"スタンプ":"思い出";
   return '<nav class="bottom-nav">'+
     item("home","home","ホーム",active)+item("plan","plan","プラン",active)+
     '<button class="nav-plus" data-action="new-trip" aria-label="新しい旅">'+icon("plus")+'</button>'+
-    item("memories","memories","思い出",active)+item("profile","profile","マイページ",active)+
+    item(fourthId,"memories",fourthLabel,active)+item("profile","profile","マイページ",active)+
   '</nav>';
 }
 function item(id, ico, label, active){ return '<button class="nav-item '+(id===active?'active':'')+'" data-action="tab" data-tab="'+id+'">'+icon(ico)+'<span>'+label+'</span></button>'; }
@@ -576,7 +578,7 @@ document.addEventListener("click",e=>{
   }
   else if(a==="close-sheet") closeSheet();
   else if(a==="reset"){ closeSheet(); localStorage.removeItem(KEY); state=Object.assign({},defaults); location.hash=""; render(); toast("デモデータをリセットしました"); }
-  else if(a==="tab"){ const t=el.dataset.tab; if(t==="home") go(state.tripStatus==="active"?"home-active":state.tripStatus==="none"?"home-empty":"home-planned"); if(t==="plan") go("plans"); if(t==="memories") go("memories"); if(t==="profile") go("profile"); }
+  else if(a==="tab"){ const t=el.dataset.tab; if(t==="home") go(state.tripStatus==="active"?"home-active":state.tripStatus==="none"?"home-empty":"home-planned"); if(t==="plan") go("plans"); if(t==="stampbook") go("stampbook"); if(t==="memories") go("memories"); if(t==="profile") go("profile"); }
   else if(a==="chip"){
     const key=el.dataset.key, v=el.dataset.value;
     if(key==="interests"){ const arr=new Set(state.interests); arr.has(v)?arr.delete(v):arr.add(v); state.interests=[...arr]; }
