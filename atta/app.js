@@ -526,7 +526,7 @@ function memories(){
       '<div class="row between"><h2>旅の記録</h2><button class="text-btn">すべて見る ›</button></div>'+
       '<div class="ref-stats"><div><b>◉</b><strong>32<span>か国</span></strong><small>訪れた国</small></div><div><b class="donut">◔</b><strong>16%</strong><small>世界を旅した<br>(195か国中)</small></div></div>'+
       '<h3>訪れた大陸</h3><div class="ref-continents"><span>アジア<b>12か国</b></span><span>ヨーロッパ<b>11か国</b></span><span>北アメリカ<b>4か国</b></span><span>南アメリカ<b>3か国</b></span><span>アフリカ<b>2か国</b></span><span>オセアニア<b>1か国</b></span></div>'+
-      '<button class="ref-collection" data-action="stampbook"><div class="passport-icon">▦</div><div><strong>ATTA! スタンプコレクション</strong><p><b>48</b> / 100</p><div class="progress"><span style="width:48%"></span></div><small>まだ見ぬ景色を集めよう。</small></div><span>›</span></button>'+
+      '<button class="ref-collection" data-action="stampbook"><div class="passport-icon">'+brandMark("passport-mark")+'</div><div><strong>ATTA! スタンプコレクション</strong><p><b>48</b> / 100</p><div class="progress"><span style="width:48%"></span></div><small>まだ見ぬ景色を集めよう。</small></div><span>›</span></button>'+
     '</div>'+nav("passport")+
   '</section>';
 }
