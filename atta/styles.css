@@ -1053,3 +1053,84 @@ button{-webkit-tap-highlight-color:transparent}
   .tutorial-body>h1{font-size:30px}
   .tutorial-visual{min-height:320px}
 }
+
+
+/* === SILVA DOT / LIVE MAP === */
+.silva-dot{
+  position:absolute;
+  right:14px;
+  bottom:116px;
+  z-index:25;
+  border:0;
+  background:rgba(255,255,255,.96);
+  border-radius:999px;
+  padding:6px 10px 6px 6px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--atta-brand-navy);
+  font-size:10px;
+  font-weight:900;
+  box-shadow:0 12px 28px rgba(4,31,48,.22);
+  backdrop-filter:blur(12px);
+}
+.silva-dot-face{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:#fff8ef;
+  box-shadow:inset 0 0 0 1px #f3e8df;
+}
+.silva-dot-face img{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  transform:translateY(2px);
+}
+.silva-dot:active{transform:scale(.97)}
+.silva-sheet-head{
+  display:grid;
+  grid-template-columns:68px 1fr 42px;
+  gap:10px;
+  align-items:start;
+}
+.silva-sheet-head>img{
+  width:68px;
+  height:68px;
+  object-fit:contain;
+  background:#fff9ef;
+  border-radius:18px;
+}
+.silva-sheet-head .icon-btn{justify-self:end}
+.silva-sheet-head h2{margin-top:3px}
+.silva-sheet-head p{margin-top:4px}
+.silva-suggestion-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.silva-suggestion-grid button{
+  border:1px solid #e5ebee;
+  background:#fff;
+  border-radius:18px;
+  padding:13px;
+  text-align:left;
+  color:var(--atta-brand-navy);
+  box-shadow:0 8px 18px rgba(11,45,74,.05);
+}
+.silva-suggestion-grid button>span{
+  display:block;
+  font-size:22px;
+  margin-bottom:7px;
+}
+.silva-suggestion-grid strong,
+.silva-suggestion-grid small{display:block}
+.silva-suggestion-grid strong{font-size:12px}
+.silva-suggestion-grid small{
+  font-size:9px;
+  color:#71818c;
+  margin-top:3px;
+}
