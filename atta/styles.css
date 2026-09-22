@@ -1134,3 +1134,137 @@ button{-webkit-tap-highlight-color:transparent}
   color:#71818c;
   margin-top:3px;
 }
+
+
+/* === SILVA CONTEXTUAL GUIDANCE === */
+.silva-tip-card{
+  width:100%;
+  margin-top:12px;
+  border:1px solid #e3eaee;
+  background:linear-gradient(135deg,#fff,#fff9ef);
+  border-radius:18px;
+  padding:11px;
+  display:grid;
+  grid-template-columns:58px 1fr 12px;
+  gap:10px;
+  align-items:center;
+  text-align:left;
+  color:var(--atta-brand-navy);
+  box-shadow:0 8px 20px rgba(11,45,74,.05);
+}
+.silva-tip-card>img{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  background:#fff7ed;
+  border-radius:16px;
+}
+.silva-tip-card small,
+.silva-tip-card strong{display:block}
+.silva-tip-card small{
+  color:var(--atta-brand-red);
+  font-size:8px;
+  font-weight:950;
+  letter-spacing:.05em;
+}
+.silva-tip-card strong{
+  font-size:12px;
+  margin-top:3px;
+}
+.silva-tip-card p{
+  margin:4px 0 0!important;
+  font-size:9px!important;
+  line-height:1.45!important;
+  color:#61727c!important;
+}
+
+/* Stamp reaction */
+.stamp-silva-reaction{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:4px 9px 4px 4px;
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  box-shadow:0 8px 18px rgba(11,45,74,.07);
+  margin:8px auto 0;
+}
+.stamp-silva-reaction>img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  background:#fff7ed;
+  border-radius:50%;
+}
+.stamp-silva-reaction small,
+.stamp-silva-reaction strong{display:block;text-align:left}
+.stamp-silva-reaction small{font-size:8px;color:#71818c}
+.stamp-silva-reaction strong{font-size:11px;color:var(--atta-brand-navy)}
+.stamp-success-v2 .stamp-hero{margin-top:2px}
+
+/* Memory editor */
+.memory-silva-v1{background:#fffaf3}
+.silva-memory-editor{
+  display:grid;
+  grid-template-columns:98px 1fr;
+  gap:12px;
+  align-items:center;
+  background:
+    radial-gradient(circle at 85% 18%,rgba(175,222,241,.35),transparent 24%),
+    #fff;
+  border-radius:24px;
+  padding:14px;
+  box-shadow:0 12px 28px rgba(11,45,74,.07);
+}
+.silva-memory-editor>img{
+  width:98px;
+  height:98px;
+  object-fit:contain;
+}
+.silva-memory-editor small{
+  color:var(--atta-brand-red);
+  font-size:8px;
+  font-weight:900;
+}
+.silva-memory-editor h1{
+  font-size:22px;
+  line-height:1.1;
+  margin:4px 0 0;
+}
+.silva-memory-editor p{
+  font-size:10px;
+  line-height:1.5;
+  color:#627480;
+  margin:6px 0 0;
+}
+.silva-memory-question{
+  padding:14px;
+  margin-top:12px;
+}
+.silva-memory-question>span{
+  display:block;
+  font-size:8px;
+  color:#71818c;
+  margin-bottom:4px;
+}
+.silva-memory-question>strong{
+  font-size:13px;
+}
+.memory-answer-chips{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  margin-top:10px;
+  scrollbar-width:none;
+}
+.memory-answer-chips::-webkit-scrollbar{display:none}
+.memory-answer-chips button{
+  border:1px solid #e3e9ec;
+  background:#f7f9fa;
+  color:var(--atta-brand-navy);
+  border-radius:999px;
+  white-space:nowrap;
+  padding:8px 10px;
+  font-size:9px;
+  font-weight:800;
+}
