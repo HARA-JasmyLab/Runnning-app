@@ -479,7 +479,7 @@ function spot(){
         '<div class="row between"><div><h1>竹林の小径</h1><p>🇯🇵 京都・嵐山</p></div><button class="place-map-btn" data-action="live-map">▱<span>地図で見る</span></button></div>'+
         '<p class="place-description">竹の音と木漏れ日が心地よい、嵐山を代表する散策路。朝は比較的静かで、家族でも歩きやすいルートです。滞在の目安は30〜45分。</p>'+
         '<div class="pills ref-tags"><span class="chip"># 絶景</span><span class="chip"># 歴史</span><span class="chip"># 散歩</span><span class="chip"># 文化</span><span class="chip"># 写真</span></div>'+
-        '<div class="spot-practical card"><div><small>おすすめ時間</small><strong>8:00–10:00</strong></div><div><small>滞在目安</small><strong>30–45分</strong></div><div><small>家族向け</small><strong>◎</strong></div></div>'+
+        '<div class="spot-practical card"><div><small>おすすめ時間</small><strong>8:00–10:00</strong></div><div><small>滞在目安</small><strong>30–45分</strong></div><div><small>家族向け</small><strong>◎</strong></div></div><button class="silva-tip-card" data-action="silva-spot-tip"><img src="/assets/silva.svg" alt=""><div><small>しるべからひとこと</small><strong>朝なら比較的ゆっくり歩けるよ。</strong><p>このあと天龍寺まで徒歩8分。今の旅程にも無理なくつながります。</p></div><span>›</span></button>'+
         '<div class="row between nearby-title"><h3>この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
         '<div class="nearby-grid ref-nearby"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
         '<div class="spot-section-title"><div><small>ATTA! STAMP</small><h3>竹林を歩こう</h3></div><span>未獲得</span></div>'+
@@ -515,7 +515,15 @@ function stamp(){
   '</div></div></section>';
 }
 function memory(){
-  return '<section class="screen no-nav">'+top("思い出を追加",true)+'<div class="content"><h1 class="h1">この瞬間を残そう</h1><p class="body muted" style="margin-top:6px">長文は不要。写真とひとことだけで十分です。</p><label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none"><div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div><button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✨ しるべにひとことを作ってもらう</button><button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button></div></section>';
+  return '<section class="screen no-nav memory-silva-v1">'+top("思い出を追加",true)+
+    '<div class="content">'+
+      '<div class="silva-memory-editor"><img src="/assets/silva.svg" alt="しるべ"><div><small>しるべ · Memory Editor</small><h1>この瞬間、<br>どんなふうに残す？</h1><p>長文じゃなくて大丈夫。写真とひとことがあれば、旅の記録にきれいにつなげるよ。</p></div></div>'+
+      '<div class="silva-memory-question card"><span>しるべから質問</span><strong>竹林でいちばん印象に残ったのは？</strong><div class="memory-answer-chips"><button data-action="memory-prompt" data-value="木漏れ日">木漏れ日</button><button data-action="memory-prompt" data-value="竹の音">竹の音</button><button data-action="memory-prompt" data-value="家族で歩いた時間">家族で歩いた時間</button></div></div>'+
+      '<label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none">'+
+      '<div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div>'+
+      '<button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✦ しるべにひとことを整えてもらう</button>'+
+      '<button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button>'+
+    '</div></section>';
 }
 function finish(){
   return '<section class="screen no-nav"><div class="photo-hero sunset">'+top("",true)+'</div><div class="detail-sheet" style="padding-bottom:28px;text-align:center"><h1 class="h1">京都の旅を終えますか？</h1><p class="body muted" style="margin-top:7px">ここまでの記録から旅日記をつくります。</p><div class="section">'+stats()+'</div><button class="btn red" style="margin-top:26px" data-action="make-diary">旅を終了</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></section>';
@@ -698,6 +706,7 @@ document.addEventListener("click",e=>{
   else if(a==="trip-item-menu"){ e.stopPropagation(); openSheet('<div class="row between"><h2 class="h2">予定を編集</h2><button class="icon-btn" data-action="close-sheet">×</button></div><div class="stack section"><button class="btn secondary" data-action="edit-placeholder">時間を変更</button><button class="btn secondary" data-action="edit-placeholder">別の場所に変更</button><button class="btn ghost" data-action="edit-placeholder">この予定をスキップ</button></div>'); }
   else if(a==="booking-offer"){ e.stopPropagation(); openSheet('<div class="row between"><div><div class="caption muted">BOOKABLE EXPERIENCE</div><h2 class="h2">嵐山 人力車 40分</h2></div><button class="icon-btn" data-action="close-sheet">×</button></div><div class="booking-preview-photo section"></div><div class="row between"><div><div class="small muted">2名〜</div><strong class="h3">¥8,000</strong></div><div class="booking-reward-mini"><small>予約すると</small><strong>+120 JASMY予定</strong></div></div><p class="small muted" style="margin-top:12px">予約成立後は旅程に自動で追加。JASMYは利用確認後に確定します。</p><button class="btn primary" style="margin-top:18px" data-action="booking-demo">予約を見る</button>'); }
   else if(a==="booking-demo"){ closeSheet(); toast("Booking Offers画面へ接続する準備ができています"); }
+  else if(a==="silva-spot-tip") openSheet('<div class="silva-sheet-head"><img src="/assets/silva.svg" alt="しるべ"><div><div class="caption muted">しるべ</div><h2 class="h2">竹林の小径</h2><p class="small muted">今の旅程なら朝に寄るのがいちばん楽。</p></div><button class="icon-btn" data-action="close-sheet">×</button></div><div class="card pad section"><strong>このあと天龍寺まで徒歩8分</strong><p class="small muted" style="margin-top:5px">竹林 → 天龍寺 → 渡月橋の順なら、戻り歩きが少なくなります。</p></div><button class="btn primary" style="margin-top:14px" data-action="close-sheet">このままでOK</button>');
   else if(a==="voice-demo") toast("音声入力はネイティブ実装時に接続します");
   else if(a==="date-info") toast("2026/09/21 - 09/23");
   else if(a==="budget-info") toast("予算条件は任意です");
@@ -735,7 +744,8 @@ document.addEventListener("click",e=>{
   else if(a==="simulate-arrival") go("approaching");
   else if(a==="arrival"){ go("arrival"); setTimeout(()=>go("stamp",{stamps:Math.max(state.stamps,7)}),1200); }
   else if(a==="memory") go("memory");
-  else if(a==="ai-caption"){ state.note="木漏れ日の竹林を歩く時間が、とても気持ちよかった。"; save(); render(); }
+  else if(a==="memory-prompt"){ state.note=el.dataset.value==="木漏れ日"?"木漏れ日の中を家族で歩いた時間が、いちばん心に残った。":el.dataset.value==="竹の音"?"風に揺れる竹の音が静かで、しばらく立ち止まって聞いていた。":"家族でゆっくり竹林を歩いた時間そのものが、今日のいちばんの思い出。"; save(); render(); }
+  else if(a==="ai-caption"){ state.note="木漏れ日の中を家族でゆっくり歩いた時間が、今日いちばん心に残った。"; save(); render(); }
   else if(a==="save-memory"){ const note=document.querySelector("#memoryNote"); state.note=note?note.value:state.note; go("updated-map",{memoryAdded:true,stamps:Math.max(state.stamps,7)}); toast("思い出を旅に追加しました"); }
   else if(a==="updated-map") go("updated-map");
   else if(a==="finish-trip") go("finish");
