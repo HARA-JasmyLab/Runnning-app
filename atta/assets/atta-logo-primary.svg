@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="t d">
+<title id="t">ATTA! travel stamp logo</title>
+<desc id="d">Circular coral travel stamp containing mountains, ATTA!, travel explore collect, and postal lines.</desc>
+<g fill="none" stroke="#FF4B5C" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="108" cy="118" r="92" stroke-width="5"/>
+  <circle cx="108" cy="118" r="82" stroke-width="2.5" stroke-dasharray="28 6 13 5"/>
+  <path d="M51 94 82 63l17 17 18-25 46 39" stroke-width="5"/>
+  <path d="M62 96h91" stroke-width="2.5"/>
+  <path d="M194 104c16-4 28-4 43 0M194 119c16-4 28-4 43 0M194 134c16-4 28-4 43 0" stroke-width="4"/>
+</g>
+<path d="m103 47 13-10 4 2-5 6 10 2-2 4-11-1-5 6-3-1 3-7-4-1z" fill="#0B2D4A"/>
+<text x="108" y="130" text-anchor="middle" fill="#FF4B5C" font-family="Arial Rounded MT Bold, Arial, Helvetica, sans-serif" font-size="47" font-weight="900" font-style="italic" letter-spacing="-2">ATTA!</text>
+<text x="108" y="154" text-anchor="middle" fill="#0B2D4A" font-family="Arial, Helvetica, sans-serif" font-size="8.4" font-weight="800" letter-spacing="2.2">TRAVEL · EXPLORE</text>
+<text x="108" y="168" text-anchor="middle" fill="#0B2D4A" font-family="Arial, Helvetica, sans-serif" font-size="8.4" font-weight="800" letter-spacing="3">COLLECT</text>
+<circle cx="108" cy="190" r="3.5" fill="#FF4B5C"/>
+<path d="M96 190h-21M120 190h21" stroke="#FF4B5C" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
