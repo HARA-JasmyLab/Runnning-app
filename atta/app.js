@@ -3,9 +3,14 @@ const defaults = {
   screen:"home-active", tripStatus:"active", stamps:7, memoryAdded:false,
   diaryReady:false, locationGranted:false, day:1, selectedDay:1, image:null, note:"",
   interests:["グルメ","絶景","子ども向け"], companion:"家族", pace:"バランス",
-  builderWish:"京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。",
-  builderDestination:"京都", aiAdjustment:null, aiPlanVersion:1,
-  onboardingCompleted:false, tutorialStep:0, onboardingDestination:"京都"
+  builderWish:"",
+  builderDestination:"", aiAdjustment:null, aiPlanVersion:1,
+  onboardingCompleted:false, tutorialStep:0, onboardingDestination:"",
+  silvaMessages:[], silvaSuggestions:[], silvaBusy:false, silvaError:null, silvaReady:false,
+  tripDraft:{
+    destination:null,startDate:null,endDate:null,party:null,partySize:null,
+    interests:[],pace:null,budget:null,mustDo:[],notes:[]
+  }
 };
 let state = Object.assign({}, defaults, JSON.parse(localStorage.getItem(KEY) || "{}"));
 const app = document.querySelector("#app");
@@ -349,28 +354,113 @@ function plannedHome(active){
     '</div>'+nav("home")+
   '</section>';
 }
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\\\"":"&quot;","'":"&#39;"}[ch]));
+}
+function silvaDefaultMessage(){
+  return "行ってみたい場所や、どんな旅にしたいかを話してみて。まだ行き先が決まっていなくても大丈夫。";
+}
+function formatDraftDates(draft){
+  if(draft?.startDate && draft?.endDate) return draft.startDate+" → "+draft.endDate;
+  return "日程を相談";
+}
+function draftSummary(draft){
+  if(!draft) return "";
+  const parts=[];
+  if(draft.destination) parts.push(draft.destination+"へ");
+  if(draft.party) parts.push(draft.party+(draft.partySize?" "+draft.partySize+"人":""));
+  if(draft.startDate && draft.endDate) parts.push(draft.startDate+"〜"+draft.endDate);
+  if(Array.isArray(draft.interests) && draft.interests.length) parts.push(draft.interests.join("・"));
+  if(draft.pace) parts.push(draft.pace+"ペース");
+  if(Array.isArray(draft.mustDo) && draft.mustDo.length) parts.push("行きたい場所："+draft.mustDo.join("・"));
+  return parts.join(" / ");
+}
+function silvaConversation(){
+  const messages=Array.isArray(state.silvaMessages)?state.silvaMessages:[];
+  const rows=(messages.length?messages:[{role:"assistant",content:silvaDefaultMessage()}]).map(m=>
+    '<div class="silva-chat-row '+(m.role==="user"?"user":"silva")+'">'+
+      (m.role==="assistant"?'<img src="/assets/silva.svg" alt="">':'')+
+      '<div class="silva-chat-bubble">'+esc(m.content)+'</div>'+
+    '</div>'
+  ).join("");
+  const loading=state.silvaBusy?'<div class="silva-chat-row silva"><img src="/assets/silva.svg" alt=""><div class="silva-chat-bubble typing"><i></i><i></i><i></i></div></div>':"";
+  const suggestions=Array.isArray(state.silvaSuggestions)&&state.silvaSuggestions.length
+    ? '<div class="silva-chat-suggestions">'+state.silvaSuggestions.map(v=>'<button data-action="silva-suggestion" data-value="'+esc(v)+'">'+esc(v)+'</button>').join("")+'</div>'
+    :"";
+  const error=state.silvaError?'<div class="silva-chat-error">'+esc(state.silvaError)+'</div>':"";
+  return '<div class="silva-chat-card">'+
+    '<div class="silva-chat-head"><div class="silva-chat-avatar"><img src="/assets/silva.svg" alt="しるべ"></div><div><strong>しるべに相談</strong><span>Silva · 旅の案内役</span></div><div class="silva-live-dot"></div></div>'+
+    '<div class="silva-chat-log" id="silvaChatLog">'+rows+loading+'</div>'+
+    suggestions+error+
+    '<div class="silva-chat-compose"><input id="silvaChatInput" autocomplete="off" maxlength="600" placeholder="例：秋に家族で京都へ。歩きすぎない旅がいい"><button data-action="silva-chat-send" '+(state.silvaBusy?'disabled':'')+' aria-label="しるべに送る">→</button></div>'+
+  '</div>';
+}
+async function sendSilvaMessage(raw){
+  const message=(raw||"").trim();
+  if(!message || state.silvaBusy) return;
+  const existing=Array.isArray(state.silvaMessages)?state.silvaMessages:[];
+  state.silvaMessages=[...existing,{role:"user",content:message}];
+  state.silvaBusy=true;
+  state.silvaError=null;
+  save(); render();
+  try{
+    const response=await fetch("/api/silva",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({messages:state.silvaMessages,tripDraft:state.tripDraft||{}})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(data.error||"しるべに接続できませんでした");
+    state.silvaMessages=[...state.silvaMessages,{role:"assistant",content:data.message||"もう少し旅のことを教えて。"}];
+    state.tripDraft=data.tripDraft||state.tripDraft;
+    state.silvaSuggestions=Array.isArray(data.suggestedReplies)?data.suggestedReplies:[];
+    state.silvaReady=Boolean(data.readyToGenerate);
+    const d=state.tripDraft||{};
+    if(d.destination) state.builderDestination=d.destination;
+    const summary=draftSummary(d);
+    if(summary) state.builderWish=summary;
+    if(d.party) state.companion=d.party;
+    if(Array.isArray(d.interests) && d.interests.length) state.interests=d.interests;
+    if(d.pace) state.pace=d.pace;
+  }catch(err){
+    state.silvaError=err?.message||"しるべに接続できませんでした。";
+  }finally{
+    state.silvaBusy=false;
+    save(); render();
+    requestAnimationFrame(()=>{
+      const log=document.querySelector("#silvaChatLog");
+      if(log) log.scrollTop=log.scrollHeight;
+    });
+  }
+}
 function createTrip(){
-  const wish=state.builderWish || "京都に家族4人で2泊3日。美味しいものと寺を楽しみたい。歩きすぎないプランがいい。";
-  const destination=state.builderDestination || "京都";
+  const draft=state.tripDraft||{};
+  const wish=state.builderWish || draftSummary(draft);
+  const destination=state.builderDestination || draft.destination || "";
   return '<section class="screen no-nav planner-v4">'+
     '<div class="planner-v4-hero">'+
       '<div class="planner-v4-head"><button class="icon-btn glass" data-action="back">‹</button>'+brand("white")+'<button class="icon-btn glass" data-action="menu">☰</button></div>'+
       '<div class="planner-v4-overlay"></div>'+
-      '<div class="planner-v4-copy"><div class="eyebrow">PLAN WITH SILVA</div><h1>しるべとつくる、<br>あなただけの旅プラン。</h1><p>行きたい場所と気分を、ひとことで。</p></div>'+
+      '<div class="planner-v4-copy"><div class="eyebrow">PLAN WITH SILVA</div><h1>しるべとつくる、<br>あなただけの旅プラン。</h1><p>会話するだけで、旅の希望を整理します。</p></div>'+
     '</div>'+
     '<div class="planner-v4-sheet">'+
-      '<div class="planner-v4-prompt"><div class="row between"><label>どんな旅にしたい？</label><span class="ai-mini">✦ しるべ</span></div><textarea id="wish" class="planner-prompt-input">'+wish+'</textarea><div class="prompt-actions"><button type="button" data-action="voice-demo">◉ 音声で話す</button><span>文章から条件を自動で読み取ります</span></div></div>'+
+      silvaConversation()+
+      '<div class="planner-v4-prompt silva-summary-card"><div class="row between"><label>しるべがまとめた旅の希望</label><span class="ai-mini">✦ しるべ</span></div><textarea id="wish" class="planner-prompt-input" placeholder="会話すると、ここに旅の希望がまとまります">'+esc(wish)+'</textarea></div>'+
       '<div class="planner-grid">'+
-        '<div class="planner-field"><span>行き先</span><input id="destination" value="'+destination+'"></div>'+
-        '<button class="planner-field planner-field-button" data-action="date-info"><span>旅行期間</span><strong>9/21 → 9/23</strong><small>2泊3日</small></button>'+
+        '<div class="planner-field"><span>行き先</span><input id="destination" placeholder="未定でもOK" value="'+esc(destination)+'"></div>'+
+        '<button class="planner-field planner-field-button" data-action="date-info"><span>旅行期間</span><strong>'+esc(formatDraftDates(draft))+'</strong><small>'+(draft.startDate&&draft.endDate?'しるべが確認済み':'会話から設定')+'</small></button>'+
       '</div>'+
-      '<div class="planner-section"><div class="planner-label">しるべが読み取った希望</div><div class="planner-derived"><span>👨‍👩‍👧‍👦 家族4人</span><span>🍜 グルメ</span><span>⛩ 歴史・文化</span><span>🚶 歩きすぎない</span></div></div>'+
-      '<div class="planner-section"><div class="planner-label">誰と？</div>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
+      '<div class="planner-section"><div class="planner-label">しるべが読み取った希望</div><div class="planner-derived">'+
+        (draft.party?'<span>👥 '+esc(draft.party)+(draft.partySize?' '+esc(draft.partySize)+'人':'')+'</span>':'<span class="pending">誰と？</span>')+
+        ((draft.interests||[]).map(v=>'<span>'+esc(v)+'</span>').join("")||'<span class="pending">興味</span>')+
+        (draft.pace?'<span>🚶 '+esc(draft.pace)+'</span>':'<span class="pending">旅のペース</span>')+
+      '</div></div>'+
+      '<div class="planner-section"><div class="planner-label">手動でも調整できます</div>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
       '<div class="planner-section"><div class="planner-label">興味</div>'+chips(["グルメ","絶景","子ども向け","歴史・文化","カフェ","ローカル"],state.interests,"interests")+'</div>'+
       '<div class="planner-section"><div class="planner-label">旅のペース</div>'+chips(["ゆったり","バランス","アクティブ"],[state.pace],"pace")+'</div>'+
-      '<div class="planner-section planner-budget"><div><div class="planner-label">予算</div><strong>指定なし</strong></div><button data-action="budget-info">設定 ›</button></div>'+
-      '<button class="planner-generate" data-action="generate"><span>✦</span><div><strong>しるべと旅をつくる</strong><small>移動時間・営業時間も考慮</small></div><b>→</b></button>'+
-      '<p class="planner-footnote">あとから何度でも変更できます</p>'+
+      '<div class="planner-section planner-budget"><div><div class="planner-label">予算</div><strong>'+esc(draft.budget||"指定なし")+'</strong></div><button data-action="budget-info">設定 ›</button></div>'+
+      '<button class="planner-generate '+(state.silvaReady?'ready':'')+'" data-action="generate"><span>✦</span><div><strong>'+(state.silvaReady?'この条件で旅をつくる':'しるべと旅をつくる')+'</strong><small>'+(state.silvaReady?'希望がそろいました':'会話しながら条件を整えられます')+'</small></div><b>→</b></button>'+
+      '<p class="planner-footnote">具体的なスポットと営業時間は次のPlace検索工程で検証します</p>'+
     '</div>'+
   '</section>';
 }
@@ -662,7 +752,13 @@ function back(){
 function assistant(){
   openSheet('<div class="silva-sheet-head"><img src="/assets/silva.svg" alt="しるべ"><div><div class="caption muted">Silva · 旅の案内役</div><h2 class="h2">どうした？</h2><p class="small muted">今の旅程を見ながら、次の動きを一緒に考えるよ。</p></div><button class="icon-btn" data-action="close-sheet">×</button></div><div class="silva-suggestion-grid section"><button data-action="assistant-fatigue"><span>😮‍💨</span><strong>ちょっと疲れた</strong><small>歩く距離を減らす</small></button><button data-action="assistant-rain"><span>☔</span><strong>雨が降ってきた</strong><small>屋内中心に変える</small></button><button data-action="assistant-hungry"><span>🍜</span><strong>お腹が空いた</strong><small>近くの食事を探す</small></button><button data-action="assistant-free"><span>⏱</span><strong>時間が余った</strong><small>寄り道をひとつ追加</small></button></div>');
 }
-document.addEventListener("click",e=>{
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && !e.shiftKey && e.target && e.target.id==="silvaChatInput"){
+    e.preventDefault();
+    sendSilvaMessage(e.target.value||"");
+  }
+});
+document.addEventListener("click",async e=>{
   const el=e.target.closest("[data-action]"); if(!el) return;
   const a=el.dataset.action;
   if(a==="tutorial-next"){
@@ -679,11 +775,18 @@ document.addEventListener("click",e=>{
   else if(a==="tutorial-start-trip"){
     state.onboardingCompleted=true;
     state.tutorialStep=3;
-    state.builderDestination=state.onboardingDestination||"京都";
+    state.builderDestination=state.onboardingDestination||state.builderDestination||"";
     save(); go("create");
   }
   else if(a==="back") back();
   else if(a==="new-trip") go("create");
+  else if(a==="silva-chat-send"){
+    const input=document.querySelector("#silvaChatInput");
+    await sendSilvaMessage(input?.value||"");
+  }
+  else if(a==="silva-suggestion"){
+    await sendSilvaMessage(el.dataset.value||"");
+  }
   else if(a==="generate"){
     const wish=document.querySelector("#wish");
     const dest=document.querySelector("#destination");
