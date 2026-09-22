@@ -1398,3 +1398,62 @@ button{-webkit-tap-highlight-color:transparent}
   min-width:46px;
   min-height:46px;
 }
+
+
+/* === ATTA PRIMARY LOGO / OPTION 3 === */
+.brand-lockup{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  width:72px;
+  height:72px;
+  line-height:1;
+  overflow:visible;
+}
+.brand-lockup img{
+  display:block;
+  width:72px!important;
+  height:72px!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain;
+  object-position:center;
+}
+.topbar .brand-lockup{width:60px;height:60px}
+.topbar .brand-lockup img{width:60px!important;height:60px!important}
+.ref-map-header .brand-lockup,
+.ref-memory-header .brand-lockup,
+.ref-spot-header .brand-lockup,
+.planner-v4-head .brand-lockup,
+.itinerary-v4-head .brand-lockup,
+.generating-brand .brand-lockup{
+  width:68px;
+  height:68px;
+}
+.ref-map-header .brand-lockup img,
+.ref-memory-header .brand-lockup img,
+.ref-spot-header .brand-lockup img,
+.planner-v4-head .brand-lockup img,
+.itinerary-v4-head .brand-lockup img,
+.generating-brand .brand-lockup img{
+  width:68px!important;
+  height:68px!important;
+}
+.silva-brand .brand-lockup,
+.tutorial-top .brand-lockup{width:62px;height:62px}
+.silva-brand .brand-lockup img,
+.tutorial-top .brand-lockup img{width:62px!important;height:62px!important}
+.brand-stamp.stamp-mini{
+  width:70px;
+  height:70px;
+  object-fit:contain;
+}
+.brand-stamp.stamp-hero{
+  width:min(250px,68vw);
+  height:auto;
+}
+.passport-icon .brand-mark-img{
+  width:50px;
+  height:50px;
+  object-fit:contain;
+}
