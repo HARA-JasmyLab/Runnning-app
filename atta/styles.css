@@ -1268,3 +1268,133 @@ button{-webkit-tap-highlight-color:transparent}
   font-size:9px;
   font-weight:800;
 }
+
+
+/* === FULL-BLEED HEADER SYSTEM === */
+.topbar{
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Standard pages: no white header band, same page surface continues upward */
+.screen:not(.fullbleed-header) > .topbar{
+  background:transparent!important;
+}
+.account-v1 > .topbar,
+.rewards-v1 > .topbar,
+.memory-silva-v1 > .topbar{
+  background:transparent!important;
+}
+
+/* Media/map pages: header floats directly on top of imagery/map */
+.fullbleed-header{
+  position:relative;
+}
+.fullbleed-header > .topbar,
+.fullbleed-header .story > .topbar{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:40;
+  color:#fff;
+  background:linear-gradient(180deg,rgba(3,23,36,.42),rgba(3,23,36,.12) 58%,transparent)!important;
+  padding-top:calc(10px + env(safe-area-inset-top));
+  pointer-events:none;
+}
+.fullbleed-header > .topbar > *,
+.fullbleed-header .story > .topbar > *{
+  pointer-events:auto;
+}
+.fullbleed-header .topbar strong{
+  color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.42);
+}
+.fullbleed-header .topbar .back{
+  color:#fff;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:rgba(5,45,70,.46);
+  box-shadow:0 8px 22px rgba(0,0,0,.2);
+  backdrop-filter:blur(10px);
+}
+.fullbleed-header .topbar .icon-btn{
+  color:var(--atta-brand-navy);
+  background:rgba(255,255,255,.9);
+  border-color:rgba(255,255,255,.78);
+  min-width:46px;
+  min-height:46px;
+  border-radius:50%;
+}
+
+/* Live Map truly extends behind the top safe area */
+.live-map-screen .map{
+  height:100dvh;
+  min-height:620px;
+}
+.live-map-screen .mapbox-canvas,
+.live-map-screen .map-fallback{
+  inset:0;
+}
+.live-map-screen .map-controls{
+  top:calc(82px + env(safe-area-inset-top));
+}
+.live-map-screen .map-status{
+  top:calc(72px + env(safe-area-inset-top));
+}
+.live-map-screen .silva-dot{
+  bottom:122px;
+}
+
+/* Diary: photography starts at the top edge, controls float on it */
+.diary-screen > .content{
+  padding-top:0;
+}
+.diary-screen .diary-photo{
+  margin-left:-16px;
+  margin-right:-16px;
+  width:calc(100% + 32px);
+  height:340px;
+  border-radius:0 0 28px 28px;
+}
+.diary-screen .diary-title{
+  padding-bottom:4px;
+}
+.diary-screen .content{
+  padding-bottom:calc(108px + env(safe-area-inset-bottom));
+}
+
+/* Public story: hero reaches top edge */
+.story-screen .story{
+  padding-top:0;
+}
+.story-screen .hero{
+  margin-top:0;
+  margin-left:-16px;
+  margin-right:-16px;
+  width:calc(100% + 32px);
+  height:360px;
+  border-radius:0 0 30px 30px;
+  border-top:0;
+}
+.story-screen .hero:before{
+  border-radius:0 0 22px 22px;
+}
+
+/* Passport/stamp list header should feel continuous, not a separate white bar */
+.collection-v3 .collection-header{
+  background:transparent!important;
+  padding-top:calc(14px + env(safe-area-inset-top));
+}
+
+/* Keep controls easy to tap */
+.topbar .back,
+.topbar .icon-btn,
+.collection-header .icon-btn,
+.ref-spot-header .icon-btn,
+.ref-memory-header .share-circle{
+  min-width:46px;
+  min-height:46px;
+}
