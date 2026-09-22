@@ -326,20 +326,20 @@ function createTrip(){
     '<div class="planner-v4-hero">'+
       '<div class="planner-v4-head"><button class="icon-btn glass" data-action="back">‹</button>'+brand("white")+'<button class="icon-btn glass" data-action="menu">☰</button></div>'+
       '<div class="planner-v4-overlay"></div>'+
-      '<div class="planner-v4-copy"><div class="eyebrow">PLAN WITH ATTA! AI</div><h1>AIとつくる、<br>あなただけの旅プラン。</h1><p>行きたい場所と気分を、ひとことで。</p></div>'+
+      '<div class="planner-v4-copy"><div class="eyebrow">PLAN WITH SILVA</div><h1>しるべとつくる、<br>あなただけの旅プラン。</h1><p>行きたい場所と気分を、ひとことで。</p></div>'+
     '</div>'+
     '<div class="planner-v4-sheet">'+
-      '<div class="planner-v4-prompt"><div class="row between"><label>どんな旅にしたい？</label><span class="ai-mini">✦ AI</span></div><textarea id="wish" class="planner-prompt-input">'+wish+'</textarea><div class="prompt-actions"><button type="button" data-action="voice-demo">◉ 音声で話す</button><span>文章から条件を自動で読み取ります</span></div></div>'+
+      '<div class="planner-v4-prompt"><div class="row between"><label>どんな旅にしたい？</label><span class="ai-mini">✦ しるべ</span></div><textarea id="wish" class="planner-prompt-input">'+wish+'</textarea><div class="prompt-actions"><button type="button" data-action="voice-demo">◉ 音声で話す</button><span>文章から条件を自動で読み取ります</span></div></div>'+
       '<div class="planner-grid">'+
         '<div class="planner-field"><span>行き先</span><input id="destination" value="'+destination+'"></div>'+
         '<button class="planner-field planner-field-button" data-action="date-info"><span>旅行期間</span><strong>9/21 → 9/23</strong><small>2泊3日</small></button>'+
       '</div>'+
-      '<div class="planner-section"><div class="planner-label">AIが読み取った条件</div><div class="planner-derived"><span>👨‍👩‍👧‍👦 家族4人</span><span>🍜 グルメ</span><span>⛩ 歴史・文化</span><span>🚶 歩きすぎない</span></div></div>'+
+      '<div class="planner-section"><div class="planner-label">しるべが読み取った希望</div><div class="planner-derived"><span>👨‍👩‍👧‍👦 家族4人</span><span>🍜 グルメ</span><span>⛩ 歴史・文化</span><span>🚶 歩きすぎない</span></div></div>'+
       '<div class="planner-section"><div class="planner-label">誰と？</div>'+chips(["ひとり","友だち","カップル","家族"],[state.companion],"companion")+'</div>'+
       '<div class="planner-section"><div class="planner-label">興味</div>'+chips(["グルメ","絶景","子ども向け","歴史・文化","カフェ","ローカル"],state.interests,"interests")+'</div>'+
       '<div class="planner-section"><div class="planner-label">旅のペース</div>'+chips(["ゆったり","バランス","アクティブ"],[state.pace],"pace")+'</div>'+
       '<div class="planner-section planner-budget"><div><div class="planner-label">予算</div><strong>指定なし</strong></div><button data-action="budget-info">設定 ›</button></div>'+
-      '<button class="planner-generate" data-action="generate"><span>✦</span><div><strong>AIで旅をつくる</strong><small>移動時間・営業時間も考慮</small></div><b>→</b></button>'+
+      '<button class="planner-generate" data-action="generate"><span>✦</span><div><strong>しるべと旅をつくる</strong><small>移動時間・営業時間も考慮</small></div><b>→</b></button>'+
       '<p class="planner-footnote">あとから何度でも変更できます</p>'+
     '</div>'+
   '</section>';
@@ -348,7 +348,7 @@ function generating(){
   return '<section class="screen no-nav generating-v4">'+
     '<div class="generating-photo trip-photo"><div class="generating-shade"></div><div class="generating-brand">'+brand("white")+'</div><div class="generating-copy"><div class="eyebrow">BUILDING YOUR KYOTO TRIP</div><h1>旅の流れを<br>組み立てています。</h1></div></div>'+
     '<div class="generating-sheet">'+
-      '<div class="generation-orbit"><span></span><b>AI</b></div>'+
+      '<div class="generation-orbit"><span></span><b>Silva</b></div>'+
       '<div class="generation-steps">'+
         '<div class="done"><i>✓</i><span><strong>希望を読み取りました</strong><small>家族4人・グルメ・寺・歩きすぎない</small></span></div>'+
         '<div class="done"><i>✓</i><span><strong>候補スポットを確認</strong><small>営業時間と位置関係を整理</small></span></div>'+
@@ -407,11 +407,11 @@ function itinerary(){
       '<div class="itinerary-v4-copy"><small>2026.09.21 - 09.23 · 家族4人</small><h1>京都で見つける、<br>家族の3日間</h1><div class="trip-summary-pills"><span>10 ATTA!</span><span>歩きすぎない</span></div></div>'+
     '</div>'+
     '<div class="itinerary-v4-sheet">'+
-      '<div class="ai-plan-note"><div class="ai-orb">✦</div><div><strong>ATTA! AI</strong><p>子どもが飽きにくく、移動を詰め込みすぎない流れにしました。</p></div></div>'+
+      '<div class="ai-plan-note"><div class="ai-orb">✦</div><div><strong>しるべ</strong><p>子どもが飽きにくく、移動を詰め込みすぎない流れにしました。</p></div></div>'+
       '<div class="day-tabs-v4">'+[1,2,3].map(d=>'<button class="'+(d===day?'on':'')+'" data-action="select-day" data-day="'+d+'"><small>DAY '+d+'</small><strong>9/'+(20+d)+'</strong></button>').join("")+'</div>'+
       '<div class="day-overview-v4"><div><small>DAY '+day+'</small><strong>'+(day===1?'京都市内':day===2?'嵐山':'伏見・宇治')+'</strong></div><div><small>今日の負担</small><strong>'+summary+'</strong></div></div>'+
       '<div class="itinerary-list-v4">'+items.map(renderTripItem).join("")+'</div>'+
-      '<div class="ai-adjust-v4"><div class="row between"><div><small>AIで調整</small><strong>この日の流れを変える</strong></div><span>✦</span></div><div class="ai-adjust-chips">'+["もっとゆっくり","雨の日","子ども向け","グルメを増やす"].map(v=>'<button data-action="quick-adjust" data-value="'+v+'">'+v+'</button>').join("")+'</div></div>'+
+      '<div class="ai-adjust-v4"><div class="row between"><div><small>しるべに相談</small><strong>この日の流れを変える</strong></div><span>✦</span></div><div class="ai-adjust-chips">'+["もっとゆっくり","雨の日","子ども向け","グルメを増やす"].map(v=>'<button data-action="quick-adjust" data-value="'+v+'">'+v+'</button>').join("")+'</div></div>'+
       '<div class="itinerary-actions-v4"><button class="btn secondary" data-action="edit-day">編集する</button><button class="btn primary" data-action="confirm-trip">この旅に決定</button></div>'+
     '</div>'+
   '</section>';
@@ -434,7 +434,7 @@ function liveMap(updated){
       '<span class="map-label big" style="left:26px;top:90px">ARASHIYAMA</span><span class="map-label" style="left:286px;top:280px">KATSURA</span><span class="map-label" style="left:122px;top:485px">KYOTO</span><div class="pin current" style="left:44px;top:420px"></div><div class="pin visited" style="left:92px;top:355px">✓</div><div class="pin visited" style="left:160px;top:280px">✓</div><div class="pin '+(updated?'visited':'next')+'" style="left:286px;top:168px">'+(updated?'✓':'7')+'</div><div class="pin" style="left:340px;top:96px">8</div>'+
     '</div>'+
     '<div class="map-status"><span class="map-status-live">'+(MAPBOX_TOKEN?'MAPBOX LIVE':'LIVE MAP · OSM')+'</span><span class="map-status-fallback">MAP LOADING</span></div>'+
-    '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button><button data-action="assistant" aria-label="ATTA AI">✨</button></div>'+
+    '<div class="map-controls"><button data-action="locate" aria-label="現在地">◎</button><button data-action="assistant" aria-label="しるべ">✨</button></div>'+
     '<div class="map-sheet"><div class="caption" style="font-weight:900;color:var(--red)">NEXT</div><div class="row between" style="margin-top:5px"><div><div class="h3">'+nextName+'</div><div class="small muted">京都・嵐山 · <span data-role="proximity">現在地</span></div></div><div style="text-align:right"><strong data-role="route-time">徒歩ルート</strong><div class="small muted" data-role="route-meta">計算中...</div></div></div>'+
     '<button class="btn primary" style="margin-top:12px" data-action="open-navigation">ナビを開始</button>'+
     (!updated?'<button class="btn secondary" style="margin-top:8px" data-action="spot">スポットを見る</button><button class="btn ghost" data-action="simulate-arrival">デモ：到着をシミュレート</button>':'<button class="btn ghost" data-action="finish-trip">旅を終了</button>')+
@@ -485,13 +485,13 @@ function stamp(){
   '</div></div></section>';
 }
 function memory(){
-  return '<section class="screen no-nav">'+top("思い出を追加",true)+'<div class="content"><h1 class="h1">この瞬間を残そう</h1><p class="body muted" style="margin-top:6px">長文は不要。写真とひとことだけで十分です。</p><label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none"><div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div><button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✨ AIでひとことを作る</button><button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button></div></section>';
+  return '<section class="screen no-nav">'+top("思い出を追加",true)+'<div class="content"><h1 class="h1">この瞬間を残そう</h1><p class="body muted" style="margin-top:6px">長文は不要。写真とひとことだけで十分です。</p><label class="memory-add section" for="memoryFile">'+(state.image?'<img src="'+state.image+'" alt="選択した写真">':'<span><strong>＋ 写真を追加</strong><br><span class="small">カメラ / ライブラリ</span></span>')+'</label><input id="memoryFile" type="file" accept="image/*" style="display:none"><div class="field"><label class="label">ひとこと</label><textarea id="memoryNote" class="textarea" placeholder="この瞬間をひとことで…">'+(state.note||"")+'</textarea></div><button class="btn secondary" style="margin-top:10px" data-action="ai-caption">✨ しるべにひとことを作ってもらう</button><button class="btn primary" style="margin-top:18px" data-action="save-memory">思い出に追加</button></div></section>';
 }
 function finish(){
   return '<section class="screen no-nav"><div class="photo-hero sunset">'+top("",true)+'</div><div class="detail-sheet" style="padding-bottom:28px;text-align:center"><h1 class="h1">京都の旅を終えますか？</h1><p class="body muted" style="margin-top:7px">ここまでの記録から旅日記をつくります。</p><div class="section">'+stats()+'</div><button class="btn red" style="margin-top:26px" data-action="make-diary">旅を終了</button><button class="btn ghost" data-action="updated-map">旅を続ける</button></div></section>';
 }
 function diary(){
-  return '<section class="screen">'+top("京都 2泊3日",true)+'<div class="content"><div class="diary-photo trip-photo"><div class="diary-title"><div class="caption">2026.09.21 - 09.23</div><h1 class="h2">京都で見つけた、家族の時間</h1></div></div><div class="section">'+stats()+'</div><div class="ai section"><div class="ai-tag">AIによる1日のまとめ</div><p class="body" style="margin-top:6px">京都駅から旅をスタート。鉄道博物館では子どもたちが夢中になり、錦市場では京都の味を食べ歩き。午後は清水寺から嵐山へ。竹林で新しいATTA!を見つけ、写真と一緒に旅の記憶が残りました。</p><button class="btn ghost" style="min-height:38px;margin-top:5px" data-action="rewrite">AIで書き直す</button></div><div class="timeline section">'+spots.map(s=>'<div class="tl"><div class="caption muted">'+s[0]+'</div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div>').join("")+'<div class="tl"><div class="caption muted">14:35</div><strong>竹林の小径</strong><div class="stamp-tag">✓ 竹林を歩こう</div></div></div><button class="btn primary" data-action="share">旅をシェア</button></div>'+nav("passport")+'</section>';
+  return '<section class="screen">'+top("京都 2泊3日",true)+'<div class="content"><div class="diary-photo trip-photo"><div class="diary-title"><div class="caption">2026.09.21 - 09.23</div><h1 class="h2">京都で見つけた、家族の時間</h1></div></div><div class="section">'+stats()+'</div><div class="ai section"><div class="ai-tag">しるべの1日のまとめ</div><p class="body" style="margin-top:6px">京都駅から旅をスタート。鉄道博物館では子どもたちが夢中になり、錦市場では京都の味を食べ歩き。午後は清水寺から嵐山へ。竹林で新しいATTA!を見つけ、写真と一緒に旅の記憶が残りました。</p><button class="btn ghost" style="min-height:38px;margin-top:5px" data-action="rewrite">しるべに書き直してもらう</button></div><div class="timeline section">'+spots.map(s=>'<div class="tl"><div class="caption muted">'+s[0]+'</div><strong>'+s[1]+'</strong><div class="small muted">'+s[2]+'</div></div>').join("")+'<div class="tl"><div class="caption muted">14:35</div><strong>竹林の小径</strong><div class="stamp-tag">✓ 竹林を歩こう</div></div></div><button class="btn primary" data-action="share">旅をシェア</button></div>'+nav("passport")+'</section>';
 }
 function stampbook(){
   const total=Math.max(state.stamps,7);
@@ -512,7 +512,7 @@ function story(){
   return '<section class="screen no-nav"><div class="story">'+top("",true)+'<div class="hero trip-photo"><div class="hero-copy"><div class="caption">HIROSHI’S TRIP</div><h1 class="h2">京都で見つけた、家族の時間</h1><p class="small">SEP 21 - 23</p></div></div><div class="section">'+stats()+'</div><div class="section ai"><div class="ai-tag">TRAVEL STORY</div><p class="body" style="margin-top:6px">旅程、ルート、写真、スタンプ、日記がひとつの物語としてつながります。</p></div><div class="section">'+stampStrip(state.stamps)+'</div><button class="btn red" style="margin-top:22px" data-action="new-trip">ATTA!で自分の旅をつくる</button></div></section>';
 }
 function plans(){
-  return '<section class="screen">'+top("",false)+'<div class="content"><h1 class="h1">プラン</h1><p class="body muted" style="margin-top:6px">次の旅も、AIに任せて短くつくる。</p><div class="card pad section"><div class="caption muted">PLANNED</div><h2 class="h2">京都 2泊3日</h2><p class="small muted">2026.09.21 - 09.23</p><button class="btn primary" style="margin-top:14px" data-action="itinerary">しおりを見る</button></div><button class="btn secondary" style="margin-top:14px" data-action="new-trip">＋ 新しい旅</button></div>'+nav("plan")+'</section>';
+  return '<section class="screen">'+top("",false)+'<div class="content"><h1 class="h1">プラン</h1><p class="body muted" style="margin-top:6px">次の旅も、しるべと一緒に短くつくる。</p><div class="card pad section"><div class="caption muted">PLANNED</div><h2 class="h2">京都 2泊3日</h2><p class="small muted">2026.09.21 - 09.23</p><button class="btn primary" style="margin-top:14px" data-action="itinerary">しおりを見る</button></div><button class="btn secondary" style="margin-top:14px" data-action="new-trip">＋ 新しい旅</button></div>'+nav("plan")+'</section>';
 }
 function memories(){
   return '<section class="screen ref-memory">'+
@@ -615,7 +615,7 @@ function back(){
   go(map[state.screen] || "home-empty");
 }
 function assistant(){
-  openSheet('<div class="row between"><h2 class="h2">ATTA! AI</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:5px">どうした？</p><div class="stack section"><button class="btn secondary" data-action="assistant-fatigue">ちょっと疲れた</button><button class="btn secondary" data-action="assistant-rain">雨が降ってきた</button><button class="btn secondary" data-action="assistant-hungry">お腹が空いた</button><button class="btn secondary" data-action="assistant-free">時間が余った</button></div>');
+  openSheet('<div class="row between"><h2 class="h2">しるべ</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:5px">どうした？</p><div class="stack section"><button class="btn secondary" data-action="assistant-fatigue">ちょっと疲れた</button><button class="btn secondary" data-action="assistant-rain">雨が降ってきた</button><button class="btn secondary" data-action="assistant-hungry">お腹が空いた</button><button class="btn secondary" data-action="assistant-free">時間が余った</button></div>');
 }
 document.addEventListener("click",e=>{
   const el=e.target.closest("[data-action]"); if(!el) return;
@@ -635,7 +635,7 @@ document.addEventListener("click",e=>{
   else if(a==="quick-adjust"){
     const v=el.dataset.value||"";
     const detail=v==="もっとゆっくり"?"徒歩 -1.8km · 自由時間 +45分":v==="雨の日"?"屋内スポット 2件に変更 · 徒歩 -0.9km":v==="子ども向け"?"体験スポット +1 · 待ち時間 -20分":"食事・カフェ +1 · 移動 +8分";
-    openSheet('<div class="row between"><div><div class="caption muted">ATTA! AI</div><h2 class="h2">'+v+'</h2></div><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:8px">旅程全体ではなく、この日の流れだけを調整します。</p><div class="ai-change-preview card pad section"><small>変更すると</small><strong>'+detail+'</strong><div class="small muted" style="margin-top:6px">予約済みの予定は動かしません。</div></div><button class="btn primary" data-action="apply-adjust" data-value="'+v+'">この予定に変更</button>');
+    openSheet('<div class="row between"><div><div class="caption muted">しるべ</div><h2 class="h2">'+v+'</h2></div><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:8px">旅程全体ではなく、この日の流れだけを調整します。</p><div class="ai-change-preview card pad section"><small>変更すると</small><strong>'+detail+'</strong><div class="small muted" style="margin-top:6px">予約済みの予定は動かしません。</div></div><button class="btn primary" data-action="apply-adjust" data-value="'+v+'">この予定に変更</button>');
   }
   else if(a==="apply-adjust"){ state.aiAdjustment=el.dataset.value||""; state.aiPlanVersion=(state.aiPlanVersion||1)+1; save(); closeSheet(); toast("旅程を更新しました"); render(); }
   else if(a==="edit-day") openSheet('<div class="row between"><h2 class="h2">DAY '+(state.selectedDay||1)+' を編集</h2><button class="icon-btn" data-action="close-sheet">×</button></div><p class="body muted" style="margin-top:8px">順番・時間・スポット変更は次の編集画面でまとめて操作します。</p><div class="stack section"><button class="btn secondary" data-action="edit-placeholder">順番を並べ替える</button><button class="btn secondary" data-action="edit-placeholder">スポットを追加</button><button class="btn secondary" data-action="edit-placeholder">時間を変更</button></div>');
@@ -696,7 +696,7 @@ document.addEventListener("click",e=>{
   else if(a==="story"){ location.hash="story"; go("story"); }
   else if(a==="copy-link"){ const url=location.origin+location.pathname+"#story"; navigator.clipboard?.writeText(url); toast("共有リンクをコピーしました"); }
   else if(a==="native-share"){ const url=location.origin+location.pathname+"#story"; if(navigator.share) navigator.share({title:"ATTA! 京都の旅",text:"京都で見つけた、家族の3日間",url}); else { navigator.clipboard?.writeText(url); toast("共有リンクをコピーしました"); } }
-  else if(a==="rewrite"){ openSheet('<div class="row between"><h2 class="h2">AIで書き直す</h2><button class="icon-btn" data-action="close-sheet">×</button></div><div class="stack section"><button class="btn secondary" data-action="rewrite-done">もっと短く</button><button class="btn secondary" data-action="rewrite-done">感情的に</button><button class="btn secondary" data-action="rewrite-done">シンプルに</button><button class="btn secondary" data-action="rewrite-done">子ども目線</button></div>'); }
+  else if(a==="rewrite"){ openSheet('<div class="row between"><h2 class="h2">しるべに書き直してもらう</h2><button class="icon-btn" data-action="close-sheet">×</button></div><div class="stack section"><button class="btn secondary" data-action="rewrite-done">もっと短く</button><button class="btn secondary" data-action="rewrite-done">感情的に</button><button class="btn secondary" data-action="rewrite-done">シンプルに</button><button class="btn secondary" data-action="rewrite-done">子ども目線</button></div>'); }
   else if(a==="rewrite-done"){ closeSheet(); toast("旅日記を書き直しました"); }
   else if(a==="assistant") assistant();
   else if(a.startsWith("assistant-")){ closeSheet(); toast(a==="assistant-fatigue"?"徒歩を約1.8km減らす案に変更できます":a==="assistant-rain"?"屋内中心のルートを提案しました":a==="assistant-hungry"?"近くのランチ候補を3件追加しました":"30分で寄れる場所を追加しました"); }
