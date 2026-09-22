@@ -1,6 +1,6 @@
-const KEY = "atta-mvp-v1";
+const KEY = "atta-mvp-v2";
 const defaults = {
-  screen:"home-empty", tripStatus:"none", stamps:6, memoryAdded:false,
+  screen:"home-active", tripStatus:"active", stamps:7, memoryAdded:false,
   diaryReady:false, locationGranted:false, day:1, image:null, note:"",
   interests:["グルメ","絶景","子ども向け"], companion:"家族", pace:"バランス"
 };
@@ -42,6 +42,8 @@ let liveUserMarker = null;
 let liveWatchId = null;
 let liveGeofenceTimer = null;
 let liveRouteStart = null;
+let showcaseMapInstance = null;
+let showcaseRetry = null;
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 function go(screen, patch){ state = Object.assign({}, state, patch || {}, {screen}); save(); render(); window.scrollTo(0,0); }
@@ -51,8 +53,10 @@ function closeSheet(){ overlay.classList.remove("open"); overlay.setAttribute("a
 function destroyLiveMap(){
   if(liveWatchId!=null && navigator.geolocation){ navigator.geolocation.clearWatch(liveWatchId); liveWatchId=null; }
   if(liveGeofenceTimer){ clearTimeout(liveGeofenceTimer); liveGeofenceTimer=null; }
+  if(showcaseRetry){ clearTimeout(showcaseRetry); showcaseRetry=null; }
   liveRouteStart=null;
   if(liveMapInstance){ try{ liveMapInstance.remove(); }catch{} liveMapInstance=null; liveUserMarker=null; }
+  if(showcaseMapInstance){ try{ showcaseMapInstance.remove(); }catch{} showcaseMapInstance=null; }
 }
 function routeCacheKey(updated){ return updated ? "atta-route-tenryuji-v2" : "atta-route-bamboo-v2"; }
 function haversineMeters(a,b){
@@ -211,8 +215,47 @@ async function initMapboxMap(updated){
     shell.classList.add("mapbox-unavailable");
   }
 }
-function brand(){
-  return '<div class="brand brand-lockup" aria-label="ATTA!"><span class="brand-word">ATTA</span><span class="brand-mark"><span class="brand-bang">!</span><span class="brand-pin"></span></span></div>';
+function addShowcaseRoute(map,type){
+  const routes={
+    home:[[130.9,33.8],[132.45,34.39],[135.50,34.69],[136.72,35.36],[139.76,35.68]],
+    memory:[[-122.4,37.8],[-74.0,40.7],[-0.12,51.5],[13.4,52.5],[139.76,35.68],[151.2,-33.86]],
+    spot:[[135.63,34.99],[135.67,35.01],[135.72,35.02]]
+  };
+  const coords=routes[type]||routes.home;
+  map.addSource("showcase-route",{type:"geojson",data:{type:"Feature",geometry:{type:"LineString",coordinates:coords},properties:{}}});
+  map.addLayer({id:"showcase-route",type:"line",source:"showcase-route",paint:{
+    "line-color":"#ffffff","line-width":3,"line-opacity":0.92,"line-dasharray":[1,2.2]
+  }});
+}
+function initShowcaseMap(type,attempt=0){
+  const id=type==="home"?"tripReferenceMap":type==="memory"?"memoryReferenceMap":"spotReferenceMap";
+  const container=document.getElementById(id);
+  if(!container) return;
+  if(!window.mapboxgl || !MAPBOX_TOKEN){
+    if(attempt<12){ showcaseRetry=setTimeout(()=>initShowcaseMap(type,attempt+1),180); }
+    return;
+  }
+  try{
+    window.mapboxgl.accessToken=MAPBOX_TOKEN;
+    const options=type==="home"
+      ? {center:[136.0,35.0],zoom:4.35,bearing:-7,pitch:12,style:"mapbox://styles/mapbox/satellite-streets-v12"}
+      : type==="memory"
+      ? {center:[20,20],zoom:1.18,bearing:-8,pitch:0,style:"mapbox://styles/mapbox/satellite-streets-v12",projection:"globe"}
+      : {center:[135.69,35.02],zoom:8.7,bearing:0,pitch:0,style:"mapbox://styles/mapbox/streets-v12"};
+    showcaseMapInstance=new window.mapboxgl.Map({
+      container,interactive:false,attributionControl:false,fadeDuration:0,...options
+    });
+    showcaseMapInstance.once("load",()=>{
+      container.classList.add("ready");
+      if(type==="memory" && showcaseMapInstance.setFog){
+        showcaseMapInstance.setFog({color:"#071c2b","high-color":"#071c2b","horizon-blend":0.08,"space-color":"#020a12","star-intensity":0.8});
+      }
+      addShowcaseRoute(showcaseMapInstance,type);
+    });
+  }catch(err){ console.warn("ATTA showcase map fallback",err); }
+}
+function brand(tone="navy"){
+  return '<div class="brand brand-lockup brand-'+tone+'" aria-label="ATTA!"><span class="brand-word">ATTA</span><span class="brand-mark"><span class="brand-bang">!</span><span class="brand-pin"></span></span></div>';
 }
 function top(title, back){ return '<div class="topbar">'+(back===false?brand():'<button class="back" data-action="back">‹</button>')+(title?'<strong>'+title+'</strong>':'')+'<button class="icon-btn" data-action="menu">•••</button></div>'; }
 function icon(name){
@@ -242,36 +285,26 @@ function stampStrip(count){
 }
 function stats(){ return '<div class="stats"><div class="stat"><strong>6</strong><span class="caption">Spot</span></div><div class="stat"><strong>'+state.stamps+'</strong><span class="caption">Stamp</span></div><div class="stat"><strong>18</strong><span class="caption">Photos</span></div><div class="stat"><strong>8.2</strong><span class="caption">km</span></div></div>'; }
 
-function homeEmpty(){
-  return '<section class="screen ai-home">'+
-    '<div class="ai-home-hero">'+
-      '<div class="ai-home-header">'+brand()+'<div class="row"><button class="icon-btn glass" data-action="menu" aria-label="検索">⌕</button><button class="icon-btn glass" data-action="menu" aria-label="メニュー">☰</button></div></div>'+
-      '<div class="ai-home-copy"><div class="eyebrow">ATTA! TRIP PLANNER</div><h1 class="display">AIとつくる、<br>あなただけの旅プラン。</h1><p>行きたい場所や、やりたいことから。<br>あなたらしい旅の流れをつくります。</p></div>'+
-    '</div>'+
-    '<div class="content ai-home-content">'+
-      '<div class="ai-prompt-card card"><div class="row"><div class="ai-orb">✦</div><div><strong>どんな旅にしますか？</strong><div class="small muted">ひとことでOK。あとから調整できます。</div></div></div><button class="ai-prompt-input" data-action="new-trip"><span>例：京都で家族とゆっくり寺とグルメ</span><b>→</b></button></div>'+
-      '<div class="section-title row between"><h3 class="h3">おすすめのプラン</h3><button class="text-btn" data-action="new-trip">すべて見る ›</button></div>'+
-      '<div class="plan-cards"><button class="plan-promo promo-kyoto" data-action="new-trip"><span>春の京都<br>3泊4日</span><small>歴史と桜をめぐる旅</small></button><button class="plan-promo promo-sea" data-action="new-trip"><span>瀬戸内<br>2泊3日</span><small>島と美術館をめぐる旅</small></button></div>'+
-      '<div class="section-title"><h3 class="h3">人気のテーマで探す</h3></div>'+
-      '<div class="theme-grid"><button>絶景</button><button>グルメ</button><button>温泉</button><button>世界遺産</button><button>ひとり旅</button></div>'+
-    '</div>'+nav("home")+
-  '</section>';
-}
+function homeEmpty(){ return plannedHome(true); }
 function plannedHome(active){
   const isActive = active || state.tripStatus==="active";
-  return '<section class="screen trip-home">'+
-    '<div class="trip-map-hero">'+
-      '<div class="trip-home-header">'+brand()+'<div class="segmented"><button class="on">地図</button><button>リスト</button></div></div>'+
-      '<div class="trip-home-copy"><div class="small">'+(isActive?'今回の旅':'次の旅')+'</div><div class="trip-distance">'+(isActive?'27.4':'0')+'<span> km</span></div><div class="small">京都 · 6スポット</div></div>'+
-      '<svg class="journey-line" viewBox="0 0 390 360" preserveAspectRatio="none"><path d="M54 300 C110 258,96 208,160 198 S255 185,290 122 S344 94,356 48"/><circle cx="54" cy="300" r="6"/><circle cx="160" cy="198" r="5"/><circle cx="290" cy="122" r="5"/><circle cx="356" cy="48" r="6"/></svg>'+
-      '<div class="photo-pin p1"><span>京都</span></div><div class="photo-pin p2"><span>嵐山</span></div><div class="photo-pin p3"><span>清水寺</span></div>'+
-      '<button class="map-fab" data-action="'+(isActive?'live-map':'start-trip')+'">➤</button>'+
+  return '<section class="screen ref-home">'+
+    '<div class="ref-home-map">'+
+      '<div id="tripReferenceMap" class="showcase-map"></div>'+
+      '<div class="satellite-shade"></div>'+
+      '<div class="ref-map-header">'+brand("white")+'<div class="segmented ref-segment"><button class="on">地図</button><button>リスト</button></div></div>'+
+      '<div class="ref-trip-meta"><span>今回の旅</span><strong>1,250 <b>km</b></strong><small>8 都道府県 · 12 スポット</small></div>'+
+      '<div class="ref-photo-pin pin-miyajima"><i></i><span>宮島</span></div>'+
+      '<div class="ref-photo-pin pin-hiroshima"><i></i><span>広島</span></div>'+
+      '<div class="ref-photo-pin pin-kyoto"><i></i><span>京都</span></div>'+
+      '<div class="ref-photo-pin pin-fuji"><i></i><span>富士山</span></div>'+
+      '<div class="ref-photo-pin pin-tokyo"><i></i><span>東京</span></div>'+
+      '<div class="plane-glyph plane-a">✈</div><div class="plane-glyph plane-b">✈</div>'+
+      '<div class="current-dot"></div><button class="ref-locate" data-action="live-map">➤</button>'+
     '</div>'+
-    '<div class="content trip-home-content">'+
-      '<button class="stamp-achievement card" data-action="stampbook"><div class="stamp-thumb">⛩</div><div class="grow"><div class="caption muted">新しいスタンプを獲得！</div><strong>京都・嵐山</strong><div class="small muted">2026.09.21</div></div><div class="stamp-seal">ATTA!<br>STAMP</div><span>›</span></button>'+
-      '<div class="section-title"><h3 class="h3">移動の記録</h3></div>'+
-      '<div class="movement-grid"><div><b>♟</b><strong>8.2 km</strong><span>徒歩</span></div><div><b>▣</b><strong>18 km</strong><span>電車</span></div><div><b>◆</b><strong>0 km</strong><span>車</span></div><div><b>✈</b><strong>0 km</strong><span>飛行機</span></div></div>'+
-      (isActive?'<button class="btn primary" style="margin-top:14px" data-action="live-map">Live Mapを開く</button>':'<button class="btn primary" style="margin-top:14px" data-action="start-trip">旅を開始</button>')+
+    '<div class="ref-home-sheet">'+
+      '<button class="ref-stamp-card" data-action="stampbook"><div class="ref-stamp-image"></div><div class="ref-stamp-copy"><small>新しいスタンプを獲得！</small><strong>宮島・厳島神社</strong><span>2026.09.21</span></div><div class="ref-stamp-seal">ATTA!<br>STAMP</div><b>›</b></button>'+
+      '<div class="ref-move-card"><h3>移動の記録</h3><div class="movement-grid ref-movement"><div><b>♟</b><span>徒歩</span><strong>12 km</strong></div><div><b>▣</b><span>電車</span><strong>420 km</strong></div><div><b>◆</b><span>車</span><strong>310 km</strong></div><div><b>✈</b><span>飛行機</span><strong>480 km</strong></div></div></div>'+
     '</div>'+nav("home")+
   '</section>';
 }
@@ -333,17 +366,18 @@ function liveMap(updated){
     '</div></div></section>';
 }
 function spot(){
-  return '<section class="screen no-nav spot-v3">'+
-    '<div class="photo-hero bamboo"><div class="photo-actions"><button class="icon-btn" data-action="back">‹</button><div class="row"><button class="icon-btn" aria-label="検索">⌕</button><button class="icon-btn" aria-label="お気に入り">♡</button></div></div><div class="spot-counter">1 / 10</div></div>'+
-    '<div class="detail-sheet">'+
-      '<div class="row between"><div><h1 class="h1">竹林の小径</h1><div class="small muted">🇯🇵 京都・嵐山</div></div><button class="round-action" data-action="live-map">▱<span>地図で見る</span></button></div>'+
-      '<p class="body spot-lead">竹の音と木漏れ日が心地よい、嵐山を代表する散策路。旅の途中に少し立ち止まって、空気ごと記憶に残したい場所です。</p>'+
-      '<div class="pills spot-tags"><span class="chip"># 絶景</span><span class="chip"># 散歩</span><span class="chip"># 写真</span><span class="chip"># 文化</span></div>'+
-      '<div class="section row between"><h3 class="h3">この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
-      '<div class="nearby-grid"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
-      '<div class="stamp-card section"><div class="caption">ATTA! STAMP</div><strong>竹林を歩こう</strong><p class="small muted">現地に到着すると自動でGET</p></div>'+
-      '<button class="btn primary" style="margin-top:18px" data-action="live-map">ここへ行く</button>'+
-    '</div></section>';
+  return '<section class="screen no-nav ref-spot">'+
+    '<div class="ref-spot-map"><div id="spotReferenceMap" class="showcase-map"></div><div class="spot-map-wash"></div><div class="ref-spot-header">'+brand("navy")+'<div class="row"><button class="icon-btn glass">⌕</button><button class="icon-btn glass" data-action="menu">☰</button></div></div><div class="spot-map-label">竹林の小径 <span>●</span></div><div class="map-photo-bubble b1"></div><div class="map-photo-bubble b2"></div></div>'+
+    '<div class="ref-place-card">'+
+      '<div class="ref-place-photo bamboo"><button class="ref-back" data-action="back">‹</button><span class="ref-counter">1 / 10</span><button class="heart">♡</button></div>'+
+      '<div class="ref-place-content"><div class="row between"><div><h1>竹林の小径</h1><p>🇯🇵 京都・嵐山</p></div><button class="place-map-btn" data-action="live-map">▱<span>地図で見る</span></button></div>'+
+      '<p class="place-description">竹の音と木漏れ日が心地よい、嵐山を代表する散策路。静かな竹林に包まれながら、京都らしい時間をゆっくり楽しめます。</p>'+
+      '<div class="pills ref-tags"><span class="chip"># 絶景</span><span class="chip"># 歴史</span><span class="chip"># 散歩</span><span class="chip"># 文化</span><span class="chip"># 写真</span></div>'+
+      '<div class="row between nearby-title"><h3>この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
+      '<div class="nearby-grid ref-nearby"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
+      '</div>'+
+    '</div>'+
+  '</section>';
 }
 function approaching(){
   return '<section class="screen no-nav">'+top("竹林の小径",true)+'<div class="content" style="padding-top:58px;text-align:center"><div class="loader"></div><h1 class="h1">もうすぐATTA!</h1><p class="body muted" style="margin-top:9px">スポットまであと50m。到着を確認しています。</p><div class="card pad section"><strong>GPS判定</strong><p class="small muted" style="margin-top:4px">MVP基準：半径150m・精度50m以内を目安に判定</p></div><button class="btn red" style="margin-top:30px" data-action="arrival">到着した</button></div></section>';
@@ -385,19 +419,18 @@ function plans(){
   return '<section class="screen">'+top("",false)+'<div class="content"><h1 class="h1">プラン</h1><p class="body muted" style="margin-top:6px">次の旅も、AIに任せて短くつくる。</p><div class="card pad section"><div class="caption muted">PLANNED</div><h2 class="h2">京都 2泊3日</h2><p class="small muted">2026.09.21 - 09.23</p><button class="btn primary" style="margin-top:14px" data-action="itinerary">しおりを見る</button></div><button class="btn secondary" style="margin-top:14px" data-action="new-trip">＋ 新しい旅</button></div>'+nav("plan")+'</section>';
 }
 function memories(){
-  return '<section class="screen memories-v3">'+
-    '<div class="memory-world-hero">'+
-      '<div class="memory-top">'+brand()+'<button class="icon-btn glass" data-action="share">↗</button></div>'+
-      '<div class="memory-copy"><h1>これまでの旅で、<br>世界が少し近くなった。</h1></div>'+
-      '<div class="world-globe"><svg viewBox="0 0 300 210" preserveAspectRatio="none"><path d="M18 118 C57 89,78 112,112 87 S170 66,194 83 S247 54,279 76" /><path d="M26 143 C67 121,98 142,132 121 S193 101,219 121 S258 106,282 116"/></svg><i class="g1"></i><i class="g2"></i><i class="g3"></i><i class="g4"></i><i class="g5"></i></div>'+
-      '<div class="hand-note world-note">旅で、世界はもっと広がる。</div>'+
+  return '<section class="screen ref-memory">'+
+    '<div class="ref-memory-hero">'+
+      '<div id="memoryReferenceMap" class="showcase-map globe-map"></div><div class="memory-space-shade"></div>'+
+      '<div class="ref-memory-header">'+brand("white")+'<button class="share-circle" data-action="share">↗</button></div>'+
+      '<h1>これまでの旅で、<br>世界が少し近くなった。</h1>'+
+      '<div class="memory-hand">旅で、<br>世界はもっと<br>広がる。</div>'+
     '</div>'+
-    '<div class="content memories-content">'+
-      '<div class="row between section-title"><h3 class="h3">旅の記録</h3><button class="text-btn">すべて見る ›</button></div>'+
-      '<div class="memory-stats"><div class="card"><b>◉</b><strong>1<span>か国</span></strong><small>訪れた国</small></div><div class="card"><b class="ring">◔</b><strong>1%</strong><small>世界を旅した</small></div></div>'+
-      '<div class="continent-card card"><div class="caption muted">訪れたエリア</div><div class="continent-row"><span>日本<br><b>1</b></span><span>アジア<br><b>1</b></span><span class="muted">欧州<br><b>0</b></span><span class="muted">北米<br><b>0</b></span><span class="muted">その他<br><b>0</b></span></div></div>'+
-      '<button class="collection-cta card" data-action="stampbook"><div class="passport-icon">▦</div><div class="grow"><strong>ATTA! スタンプコレクション</strong><div class="collection-count small-count">'+state.stamps+' <span>/ 100</span></div><div class="progress"><span style="width:'+Math.min(100,state.stamps)+'%"></span></div></div><span>›</span></button>'+
-      '<button class="btn primary" style="margin-top:14px" data-action="diary">京都の旅日記を見る</button>'+
+    '<div class="ref-memory-sheet">'+
+      '<div class="row between"><h2>旅の記録</h2><button class="text-btn">すべて見る ›</button></div>'+
+      '<div class="ref-stats"><div><b>◉</b><strong>32<span>か国</span></strong><small>訪れた国</small></div><div><b class="donut">◔</b><strong>16%</strong><small>世界を旅した<br>(195か国中)</small></div></div>'+
+      '<h3>訪れた大陸</h3><div class="ref-continents"><span>アジア<b>12か国</b></span><span>ヨーロッパ<b>11か国</b></span><span>北アメリカ<b>4か国</b></span><span>南アメリカ<b>3か国</b></span><span>アフリカ<b>2か国</b></span><span>オセアニア<b>1か国</b></span></div>'+
+      '<button class="ref-collection" data-action="stampbook"><div class="passport-icon">▦</div><div><strong>ATTA! スタンプコレクション</strong><p><b>48</b> / 100</p><div class="progress"><span style="width:48%"></span></div><small>まだ見ぬ景色を集めよう。</small></div><span>›</span></button>'+
     '</div>'+nav("memories")+
   '</section>';
 }
@@ -437,6 +470,12 @@ function render(){
   bindFile();
   if(s==="live-map" || s==="updated-map"){
     requestAnimationFrame(()=>initMapboxMap(s==="updated-map"));
+  } else if(s==="home-empty" || s==="home-planned" || s==="home-active"){
+    requestAnimationFrame(()=>initShowcaseMap("home"));
+  } else if(s==="memories"){
+    requestAnimationFrame(()=>initShowcaseMap("memory"));
+  } else if(s==="spot"){
+    requestAnimationFrame(()=>initShowcaseMap("spot"));
   }
 }
 function bindFile(){
