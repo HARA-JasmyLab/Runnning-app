@@ -79,8 +79,16 @@ function cleanMessages(input){
 
 export default {
   async fetch(request) {
+    if(request.method === 'GET'){
+      return Response.json({
+        ok:true,
+        service:'silva',
+        model:MODEL,
+        mode:'trip-requirements'
+      },{headers:{'Cache-Control':'no-store'}});
+    }
     if(request.method !== 'POST'){
-      return Response.json({error:'Method not allowed'},{status:405,headers:{Allow:'POST'}});
+      return Response.json({error:'Method not allowed'},{status:405,headers:{Allow:'GET, POST'}});
     }
 
     try{
