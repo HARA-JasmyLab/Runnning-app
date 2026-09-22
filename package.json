@@ -8,5 +8,8 @@
     "dev": "node scripts/dev.mjs",
     "test": "node --test tests/atta.test.js"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {
+    "ai": "7.0.107"
+  }
 }
