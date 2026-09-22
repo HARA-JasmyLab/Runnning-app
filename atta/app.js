@@ -438,11 +438,22 @@ function spot(){
     '<div class="ref-spot-map"><div id="spotReferenceMap" class="showcase-map"></div><div class="spot-map-wash"></div><div class="ref-spot-header">'+brand("navy")+'<div class="row"><button class="icon-btn glass">⌕</button><button class="icon-btn glass" data-action="menu">☰</button></div></div><div class="spot-map-label">竹林の小径 <span>●</span></div><div class="map-photo-bubble b1"></div><div class="map-photo-bubble b2"></div></div>'+
     '<div class="ref-place-card">'+
       '<div class="ref-place-photo bamboo"><button class="ref-back" data-action="back">‹</button><span class="ref-counter">1 / 10</span><button class="heart">♡</button></div>'+
-      '<div class="ref-place-content"><div class="row between"><div><h1>竹林の小径</h1><p>🇯🇵 京都・嵐山</p></div><button class="place-map-btn" data-action="live-map">▱<span>地図で見る</span></button></div>'+
-      '<p class="place-description">竹の音と木漏れ日が心地よい、嵐山を代表する散策路。静かな竹林に包まれながら、京都らしい時間をゆっくり楽しめます。</p>'+
-      '<div class="pills ref-tags"><span class="chip"># 絶景</span><span class="chip"># 歴史</span><span class="chip"># 散歩</span><span class="chip"># 文化</span><span class="chip"># 写真</span></div>'+
-      '<div class="row between nearby-title"><h3>この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
-      '<div class="nearby-grid ref-nearby"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
+      '<div class="ref-place-content">'+
+        '<div class="row between"><div><h1>竹林の小径</h1><p>🇯🇵 京都・嵐山</p></div><button class="place-map-btn" data-action="live-map">▱<span>地図で見る</span></button></div>'+
+        '<p class="place-description">竹の音と木漏れ日が心地よい、嵐山を代表する散策路。朝は比較的静かで、家族でも歩きやすいルートです。滞在の目安は30〜45分。</p>'+
+        '<div class="pills ref-tags"><span class="chip"># 絶景</span><span class="chip"># 歴史</span><span class="chip"># 散歩</span><span class="chip"># 文化</span><span class="chip"># 写真</span></div>'+
+        '<div class="spot-practical card"><div><small>おすすめ時間</small><strong>8:00–10:00</strong></div><div><small>滞在目安</small><strong>30–45分</strong></div><div><small>家族向け</small><strong>◎</strong></div></div>'+
+        '<div class="row between nearby-title"><h3>この近くのおすすめスポット</h3><button class="text-btn">すべて見る ›</button></div>'+
+        '<div class="nearby-grid ref-nearby"><button><span class="nearby-img n1"></span><strong>天龍寺</strong></button><button><span class="nearby-img n2"></span><strong>渡月橋</strong></button><button><span class="nearby-img n3"></span><strong>野宮神社</strong></button></div>'+
+        '<div class="spot-section-title"><div><small>ATTA! STAMP</small><h3>竹林を歩こう</h3></div><span>未獲得</span></div>'+
+        '<button class="spot-stamp-card" data-action="live-map"><div class="spot-stamp-seal">ATTA!</div><div><strong>現地に到着すると自動でGET</strong><p>GPSで到着を確認します。手動取得はありません。</p></div><b>›</b></button>'+
+        '<div class="spot-section-title booking-title"><div><small>BOOKABLE EXPERIENCES</small><h3>この場所でできる体験</h3></div></div>'+
+        '<button class="spot-booking-card" data-action="booking-offer">'+
+          '<div class="spot-booking-photo"></div>'+
+          '<div class="spot-booking-copy"><small>嵐山 · 体験</small><strong>人力車 40分コース</strong><p>竹林周辺を効率よく巡る家族向けプラン</p><div><b>¥8,000</b><span>+120 JASMY予定</span></div></div>'+
+          '<i>›</i>'+
+        '</button>'+
+        '<p class="reward-disclaimer">JASMYは予約利用確認後に確定します。</p>'+
       '</div>'+
     '</div>'+
   '</section>';
