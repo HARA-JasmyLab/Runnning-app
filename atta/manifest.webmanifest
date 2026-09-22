@@ -4,8 +4,16 @@
   "description": "AIで旅をつくり、旅先で発見を集め、旅日記として残す旅行アプリ",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fff9f1",
-  "theme_color": "#fff9f1",
+  "background_color": "#FFFDF8",
+  "theme_color": "#0B2D4A",
   "lang": "ja",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/atta-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
