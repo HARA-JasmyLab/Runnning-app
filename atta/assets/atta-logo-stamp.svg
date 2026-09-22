@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-labelledby="t d">
+<title id="t">ATTA! passport stamp logo</title><desc id="d">Circular travel stamp with airplane, ATTA wordmark, mountains and postal waves.</desc>
+<g fill="none" stroke="#FF4B5C" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="154" cy="145" r="112" stroke-width="5"/>
+  <circle cx="154" cy="145" r="101" stroke-width="2.5" stroke-dasharray="42 7 19 6"/>
+  <path d="M257 152c28-8 48-8 77 0M257 168c28-8 48-8 77 0M257 184c28-8 48-8 77 0M257 200c28-8 48-8 77 0" stroke-width="4"/>
+  <path d="M86 207l39-38 23 24 19-19 45 33H86z" stroke-width="5"/>
+  <path d="M126 193l13-13 11 13M166 191l11-10 17 14" stroke-width="3"/>
+</g>
+<g fill="#0B2D4A">
+  <text x="154" y="62" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="3">TRAVEL · EXPLORE · COLLECT</text>
+  <path d="M139 88l30-21 8 4-11 13 24 4-3 7-28-2-12 12-5-2 6-13-9-2z"/>
+</g>
+<text x="154" y="156" text-anchor="middle" fill="#FF4B5C" font-family="Marker Felt, Bradley Hand, Arial Rounded MT Bold, sans-serif" font-size="58" font-weight="900" font-style="italic">ATTA!</text>
+<text x="154" y="236" text-anchor="middle" fill="#0B2D4A" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700" letter-spacing="4">TRAVEL STAMP</text>
+</svg>
