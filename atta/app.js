@@ -258,14 +258,14 @@ function initShowcaseMap(type,attempt=0){
   }catch(err){ console.warn("ATTA showcase map fallback",err); }
 }
 function brand(tone="navy"){
-  const src=tone==="white"?"/assets/atta-logo-horizontal-white.svg":"/assets/atta-logo-horizontal.svg";
+  const src=tone==="white"?"/assets/atta-logo-primary-white.svg":"/assets/atta-logo-primary.svg";
   return '<div class="brand brand-lockup brand-'+tone+'" aria-label="ATTA!"><img src="'+src+'" alt="ATTA!"></div>';
 }
 function brandStamp(className=""){
-  return '<img class="brand-stamp '+className+'" src="/assets/atta-logo-stamp.svg" alt="ATTA! passport stamp">';
+  return '<img class="brand-stamp '+className+'" src="/assets/atta-logo-primary.svg" alt="ATTA! travel stamp">';
 }
 function brandMark(className=""){
-  return '<img class="brand-mark-img '+className+'" src="/assets/atta-mark.svg" alt="" aria-hidden="true">';
+  return '<img class="brand-mark-img '+className+'" src="/assets/atta-app-icon.svg" alt="" aria-hidden="true">';
 }
 function top(title, back){ return '<div class="topbar">'+(back===false?brand():'<button class="back" data-action="back">‹</button>')+(title?'<strong>'+title+'</strong>':'')+'<button class="icon-btn" data-action="menu">•••</button></div>'; }
 function icon(name){
