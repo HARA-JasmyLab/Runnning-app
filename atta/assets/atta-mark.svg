@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="t">
+<title id="t">ATTA! app mark</title>
+<rect width="128" height="128" rx="28" fill="#FFFDF8"/>
+<circle cx="61" cy="61" r="45" fill="none" stroke="#FF4B5C" stroke-width="4"/>
+<circle cx="61" cy="61" r="39" fill="none" stroke="#FF4B5C" stroke-width="2" stroke-dasharray="18 5"/>
+<path d="M45 41l22-15 6 3-8 9 18 3-2 5-20-2-9 9-4-2 5-9-8-1z" fill="#0B2D4A"/>
+<text x="61" y="75" text-anchor="middle" fill="#FF4B5C" font-family="Arial Rounded MT Bold, Arial, sans-serif" font-size="24" font-weight="900" font-style="italic">ATTA!</text>
+<path d="M96 65c10-3 18-3 28 0M96 74c10-3 18-3 28 0M96 83c10-3 18-3 28 0" fill="none" stroke="#FF4B5C" stroke-width="3" stroke-linecap="round"/>
+</svg>
